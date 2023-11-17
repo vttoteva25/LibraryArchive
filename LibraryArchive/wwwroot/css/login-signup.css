@@ -1,0 +1,63 @@
+﻿body {
+    background: linear-gradient(to right, #90E0EF 0%, #FFEEEE 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+}
+
+
+/*container for the form*/
+.container {
+    font-family: Bahnschrift;
+    font-weight: bold;
+    background: #fff;
+    max-width: 80%;
+    width: 60%;
+    padding-top: 5px;
+    border-radius: 5px;
+}
+
+    .container form .input-box input:focus ~ .underline::after,
+    .container form .input-box input:valid ~ .underline::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    .container form .button {
+        margin: 40px 0 20px 0;
+        border-radius: 5px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .container .input-box input[type="submit"] {
+        background: linear-gradient(to right, #90E0EF 0%, #FFEEEE 100%);
+        font-size: 17px;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .container .input-box input[type="submit"]:hover {
+            letter-spacing: 1px;
+            background: linear-gradient(to left, #99004d 0%, #ff0080 100%);
+        }
+
+    .container .option {
+        font-size: 14px;
+        text-align: center;
+    }
+
+
+
+.btn-lg {
+    color: #FFF56D;
+    background-color: #90E0EF;
+    border-color: #90E0EF;
+    font-family: Bahnschrift;
+    font-weight: bold;
+}

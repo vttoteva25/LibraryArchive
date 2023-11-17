@@ -1,0 +1,95 @@
+﻿.auth-bnt {
+    color: red;
+    padding: 5px;
+    text-decoration: none;
+}
+
+a {
+    padding: 20px;
+    text-decoration: none;
+}
+
+img {
+    max-width: 80%;
+    max-height: 80%;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+/*hello user text*/
+.navbar-nav > li {
+    padding-left: 1.2vw;
+    padding-right: 1.2vw;
+    list-style-type: none;
+    font-size: 25px;
+    margin-bottom: 22px;
+}
+
+li.toside {
+    padding-left: 40vmax;
+}
+
+.resize {
+    font-size: 1vmax;
+}
+
+
+/*profile banner*/
+.cover {
+    background-image: url(/images/profileBanner.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@media (max-width:990px) {
+    img#banner {
+        margin-top: 100px;
+    }
+
+    div.lower {
+        margin-top: 100px;
+    }
+}
+
+
+@media (max-width:800px) {
+    div#bannerCol {
+        display: none;
+    }
+
+    div.small-dis {
+        display: none;
+    }
+
+    div.lower {
+        margin-top: 50px;
+    }
+}
+
+/*button - create profile and others*/
+#showMore {
+    transition: background-size 250ms;
+    --bg-h: 100%;
+    font-family: Bahnschrift;
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+    #showMore:where(:hover, :focus-visible) {
+        background-size: 100% var(--bg-h);
+        background-position-x: left;
+    }
+/*button - create profile and others*/
+
+.dropdown {
+    padding-left: 20px;
+}
+
+.dropdown-toggle {
+    font-family: Bahnschrift;
+    font-weight: bold;
+    padding-left: 5px;
+}
