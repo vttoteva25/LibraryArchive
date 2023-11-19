@@ -6,7 +6,7 @@ namespace LibraryArchive.Models
     public class Book
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string Title { get; set; }
@@ -21,14 +21,14 @@ namespace LibraryArchive.Models
         public string Description { get; set; }
 
         [ForeignKey("Publisher Id")]
-        public int PublisherId { get; set; }
+        public string PublisherId { get; set; }
         public Publisher Publisher { get; set; }
 
         [Required]
         public bool Availability { get; set; }
 
         [ForeignKey("User Id")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         [Required]

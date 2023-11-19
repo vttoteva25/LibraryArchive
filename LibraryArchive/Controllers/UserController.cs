@@ -33,7 +33,7 @@ namespace LibraryArchive.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginLibrarianViewModel model)
+        public IActionResult Login(LoginLibrarianViewModel model)
         {
             if (ModelState.IsValid)
             {

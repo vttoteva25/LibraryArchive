@@ -6,14 +6,14 @@ namespace LibraryArchive.Models
     public class Borrowing
     {
         [Key]
-        public int Id { get; set; }
+        public string BorrowingId { get; set; }
 
         [ForeignKey("User Id")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         [ForeignKey("Book Id")]
-        public int BookId { get; set; }
+        public string BookId { get; set; }
         public Book Book { get; set; }
 
         [Required]

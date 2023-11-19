@@ -7,7 +7,7 @@ namespace LibraryArchive.Models
     {
 
         [Key]
-        public int Id { get; set; }
+        public string RoleId { get; set; }
 
         [DisplayName("Role name")]
         [Required(ErrorMessage = "Field cannot be empty!")]

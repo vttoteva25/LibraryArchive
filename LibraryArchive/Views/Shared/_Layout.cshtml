@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-       <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container ffb">
                 <a asp-controller="Home" asp-action="Index">
                     <p>Library Archive</p>
@@ -30,38 +30,38 @@
                                 </li>
                             }
                             else
-                            {                                             
-                                    <div class="dropdown">
+                            {
+                                <li class="nav-item dropdown">
+                                    <a style="padding: 5px;" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Книги
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="IndexAllBooks">Всички</a>
+                                        </li>
+                                        <li>
+                                            <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="BorrowedBooks" asp-action="IndexBorrowedBooks">Взети</a>
+                                        </li>
+                                        <li>
+                                            <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="IndexFreeBooks">Свободни</a>
+                                        </li>
+                                        <li>
+                                            <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="IndexScrappedBooks">Бракувани</a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                                        <button class="dropdown-toggle" type="button" data-toggle="dropdown">
-                                            Книги
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <li>
-                                                <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="IndexAllBooks">Всички</a>
-                                            </li>
-                                            <li>
-                                                <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="BorrowedBooks" asp-action="IndexBorrowedBooks">Взети</a>
-                                            </li>
-                                            <li>
-                                                <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="IndexFreeBooks">Свободни</a>
-                                            </li>
-                                            <li>
-                                                <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="IndexScrappedBooks">Бракувани</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <li class="nav-item">
-                                        <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Reader" asp-action="Index">Читатели</a>
-                                    </li>                                   
+                                <li class="nav-item">
+                                    <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Reader" asp-action="Index">Читатели</a>
+                                </li>
 
-                                    <li class="nav-item toside">
-                                        <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="CEO" asp-action="Index">
-                                            Здравейте, @Logged.Librarian.Username @Logged.Librarian.LastName
-                                        </a>
-                                    </li>                                                      
+                                <li class="nav-item toside">
+                                    <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="User" asp-action="Index">
+                                        Здравейте, @Logged.Librarian.FirstName @Logged.Librarian.LastName
+                                    </a>
+                                </li>
                             }
-                        </ul>   
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -5,10 +5,10 @@ namespace LibraryArchive.Models
     public class BookGenre
     {
         [ForeignKey("Book Id")]
-        public int BookId { get; set; }
+        public string BookId { get; set; }
 
         [ForeignKey("Genre Id")]
-        public int GenreId { get; set; }
+        public string GenreId { get; set; }
 
         public Book Book { get; set; }
         public Genre Genre { get; set; }

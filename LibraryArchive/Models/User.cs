@@ -6,7 +6,7 @@ namespace LibraryArchive.Models
     public class User
     {
         [Key]
-        public int Id { get; set; }      
+        public string UserId { get; set; }      
 
         [Required]
         public string FirstName { get; set; }
@@ -24,7 +24,7 @@ namespace LibraryArchive.Models
         public string Email { get; set; }
 
         [ForeignKey("Role Id")]
-        public int? RoleId { get; set; }
+        public string? RoleId { get; set; }
         public Role Role { get; set; }
 
         public ICollection<Borrowing> Borrowings { get; set; } = new List<Borrowing>();

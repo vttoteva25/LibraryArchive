@@ -65,28 +65,28 @@ namespace LibraryArchive.Data
             modelBuilder.Entity<Role>().HasData(
                new Role
                {
-                   Id = 1,
+                   RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
                    RoleName = "Librarian"
                });
 
             modelBuilder.Entity<Role>().HasData(
                new Role
                {
-                   Id = 2,
+                   RoleId = "aa5b79e4-d4ea-48f1-a764-40a33f557e36",
                    RoleName = "Reader"
                });
 
             modelBuilder.Entity<Librarian>().HasData(
                new Librarian
                {
-                   Id = 1,
+                   UserId = "e31ef11b-67a2-4ffe-8f0d-93351c5fef90",
                    FirstName = "Виктория",
                    LastName = "Тотева",
                    BirthDate = new DateTime(2003, 4, 25),
                    PhoneNumber = "0885904536",
                    Username = "vttoteva",
                    Email = "viktoriya.toteva@abv.bg",
-                   RoleId = 1,
+                   RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
                    Password = Hasher.Hash("123")
                }
              );           

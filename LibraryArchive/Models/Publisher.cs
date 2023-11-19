@@ -5,7 +5,7 @@ namespace LibraryArchive.Models
     public class Publisher
     {
         [Key]
-        public int PublisherId { get; set; }
+        public string PublisherId { get; set; }
 
         [Required]
         public string Name { get; set; }
