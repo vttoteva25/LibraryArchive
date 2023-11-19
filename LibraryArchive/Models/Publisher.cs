@@ -14,7 +14,7 @@ namespace LibraryArchive.Models
         public string Address { get; set; }
 
         [Required]
-        public string Website { get; set; }
+        public string? Website { get; set; }
 
         public ICollection<Book> Books { get; set; } = new List<Book>();
     }

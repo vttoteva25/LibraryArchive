@@ -1,5 +1,6 @@
 ﻿using LibraryArchive.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
 
 namespace LibraryArchive.Controllers
@@ -20,7 +21,13 @@ namespace LibraryArchive.Controllers
 
             if (string.IsNullOrEmpty(searchString))
             {
-                model.Books = _db.Books;
+                var books = _db.Books
+                    .Include(b => b.Authors)
+                    .Include(b => b.Genres)
+                    .Include(b => b.Publisher)
+                    .ToList();
+
+                model.Books = books;
                 model.FiltredBooksCount = 0;
                 return View(model);
             }
@@ -32,9 +39,6 @@ namespace LibraryArchive.Controllers
             }
 
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
     }
 }

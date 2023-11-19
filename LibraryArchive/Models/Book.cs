@@ -6,16 +6,13 @@ namespace LibraryArchive.Models
     public class Book
     {
         [Key]
-        public string Id { get; set; }
+        public string BookId { get; set; }
 
         [Required]
         public string Title { get; set; }
 
         [Required]
         public string PublicationYear { get; set; }
-
-        [Required]
-        public string Genre { get; set; }
 
         [Required]
         public string Description { get; set; }
@@ -32,18 +29,15 @@ namespace LibraryArchive.Models
         public User User { get; set; }
 
         [Required]
-        public int PageCount { get; set; }
-
-        [Required]
         public string Language { get; set; }       
 
         [Required]
         public bool Scrapped { get; set; }
 
         [Required]
-        public ICollection<Author> Authors { get; set; } = new List<Author>();
+        public ICollection<Author> Authors { get; set; }
 
         [Required]
-        public ICollection<Genre> Genres { get; set; } = new List<Genre>();
+        public ICollection<Genre> Genres { get; set; }
     }
 }

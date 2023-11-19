@@ -66,14 +66,14 @@ namespace LibraryArchive.Data
                new Role
                {
                    RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
-                   RoleName = "Librarian"
+                   RoleName = "Библиотекар"
                });
 
             modelBuilder.Entity<Role>().HasData(
                new Role
                {
                    RoleId = "aa5b79e4-d4ea-48f1-a764-40a33f557e36",
-                   RoleName = "Reader"
+                   RoleName = "Читател"
                });
 
             modelBuilder.Entity<Librarian>().HasData(

@@ -6,7 +6,7 @@
         <div class="col-md-10 mx-auto">
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 py-5" style="margin-top: 20px;">
-                    <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Продукти на склад</h2>
+                    <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Книги</h2>
                     <div class="row pt-4">
                         <div class="col-6">
                         </div>
@@ -33,7 +33,7 @@
                                         Жанр
                                     </th>
                                     <th style="color: #402b2b; font-family: Bahnschrift;">
-                                        Брой страници
+                                        Език
                                     </th>
                                     <th style="color: #402b2b; font-family: Bahnschrift;">
                                         Описание
@@ -53,24 +53,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (Book book in Model.Deliveries)
+                                @foreach (Book book in Model.Books)
                                 {
                                     <tr>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Title</td>
-                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Authors</td>
-                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Genres</td>
-                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.PageCount</td>
+                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">
+                                            @string.Join(", ", book.Authors.Select(a => a.Name))
+                                        </td>
+                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">
+                                            @string.Join(", ", book.Genres.Select(a => a.Name))
+                                        </td>
+                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Language</td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Description</td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.PublicationYear</td>
-                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Publisher</td>
+                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Publisher.Name</td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Availability</td>
                                         <td width="10%">
-                                            <a asp-controller="Book" asp-action="ScrapBook" asp-route-id="@book.Id">
+                                            <a asp-controller="Book" asp-action="ScrapBook" asp-route-id="@book.BookId">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" class="bi bi-door-open-fill float-right" viewBox="0 0 16 16">
                                                     <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2V3zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8 5.829 5.854z" />
                                                 </svg>
                                             </a>
-                                            <a asp-controller="Book" asp-action="Send" asp-route-id="@book.Id">
+                                            <a asp-controller="Book" asp-action="Send" asp-route-id="@book.BookId">
                                                 <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: -23px; margin-right: 30px;" width="16" height="16" fill="#000000" class="bi bi-pen-fill edit-delete float-right" viewBox="0 0 16 16">
                                                     <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
                                                 </svg>
@@ -85,7 +89,7 @@
                     {
 
                         <div class="p-4 rounded shadow-sm bg-light">
-                            <p class="normal-text mb-0">Няма намерени продукти в склада към момента.</p>
+                            <p class="normal-text mb-0">Няма книги в библиотеката.</p>
                         </div>
 
                     }

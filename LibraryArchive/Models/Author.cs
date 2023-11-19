@@ -13,11 +13,11 @@ namespace LibraryArchive.Models
         [Required]
         public DateTime BirthDate { get; set; }
 
-        public DateTime DeathDate { get; set; }
+        public DateTime? DeathDate { get; set; }
 
         [Required]
         public string Biography { get; set; }
 
-        public ICollection<Book> Books { get; set; } = new List<Book>();
+        public ICollection<Book>? Books { get; set; } = new List<Book>();
     }
 }
