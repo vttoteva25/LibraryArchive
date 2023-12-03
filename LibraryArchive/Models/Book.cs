@@ -24,10 +24,6 @@ namespace LibraryArchive.Models
         [Required]
         public bool Availability { get; set; }
 
-        [ForeignKey("User Id")]
-        public string UserId { get; set; }
-        public User User { get; set; }
-
         [Required]
         public string Language { get; set; }       
 
@@ -39,5 +35,7 @@ namespace LibraryArchive.Models
 
         [Required]
         public ICollection<Genre> Genres { get; set; }
+
+        public ICollection<User> Users { get; set; }
     }
 }

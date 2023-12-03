@@ -50,6 +50,24 @@ namespace LibraryArchive.Data
                         .HasForeignKey(ba => ba.BookId)
                 );
 
+            modelBuilder.Entity<BookUser>()
+                .HasKey(ba => new { ba.BookId, ba.UserId });
+
+            // Define the many-to-many relationship between Book and User
+            modelBuilder.Entity<Book>()
+                .HasMany(b => b.Users)
+                .WithMany(a => a.Books)
+                .UsingEntity<BookUser>(
+                    j => j
+                        .HasOne(ba => ba.User)
+                        .WithMany()
+                        .HasForeignKey(ba => ba.UserId),
+                    j => j
+                        .HasOne(ba => ba.Book)
+                        .WithMany()
+                        .HasForeignKey(ba => ba.BookId)
+                );
+
             modelBuilder.Entity<Borrowing>()
                  .HasOne(b => b.User)
                  .WithMany(u => u.Borrowings)

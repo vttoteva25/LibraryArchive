@@ -78,10 +78,24 @@ li.toside {
     padding-left: 5px;
 }
 
-    #showMore:where(:hover, :focus-visible) {
-        background-size: 100% var(--bg-h);
-        background-position-x: left;
-    }
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: inherit;
+}
+
+
+#showMore:where(:hover, :focus-visible) {
+    background-size: 100% var(--bg-h);
+    background-position-x: left;
+}
 /*button - create profile and others*/
 
 .dropdown {

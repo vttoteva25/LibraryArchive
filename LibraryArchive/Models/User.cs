@@ -28,5 +28,7 @@ namespace LibraryArchive.Models
         public Role Role { get; set; }
 
         public ICollection<Borrowing> Borrowings { get; set; } = new List<Borrowing>();
+
+        public ICollection<Book> Books { get; set; }
     }
 }

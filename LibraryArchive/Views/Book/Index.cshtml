@@ -64,7 +64,10 @@
                                             @string.Join(", ", book.Genres.Select(a => a.Name))
                                         </td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Language</td>
-                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Description</td>
+                                        <td style="color: #402b2b; font-family: Bahnschrift;" width="15%" class="ellipsis" onclick="toggleContent(this)">
+                                            @book.Description
+                                            <div class="expanded-content" style="display: none;">@book.Description</div>
+                                        </td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.PublicationYear</td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Publisher.Name</td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Availability</td>
@@ -97,4 +100,18 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleContent(cell) {
+            const expandedContent = cell.querySelector('.expanded-content');
+            if (expandedContent.style.display === 'none') {
+                expandedContent.style.display = 'block';
+                cell.classList.add('expanded');
+            } else {
+                expandedContent.style.display = 'none';
+                cell.classList.remove('expanded');
+            }
+        }
+    </script>
+
 </body>
