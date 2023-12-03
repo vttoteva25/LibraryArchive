@@ -65,7 +65,7 @@
                                         </td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.Language</td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%" class="ellipsis" onclick="toggleContent(this)">
-                                            @book.Description
+                                            @ShortenDescription(book.Description)
                                             <div class="expanded-content" style="display: none;">@book.Description</div>
                                         </td>
                                         <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@book.PublicationYear</td>
@@ -114,4 +114,17 @@
         }
     </script>
 
+    @functions {
+        string ShortenDescription(string description, int maxLength = 50)
+        {
+            if (description.Length <= maxLength)
+            {
+                return description;
+            }
+            else
+            {
+                return description.Substring(0, maxLength) + "...";
+            }
+        }
+    }
 </body>
