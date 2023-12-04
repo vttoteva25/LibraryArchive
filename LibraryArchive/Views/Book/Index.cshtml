@@ -24,10 +24,7 @@
                             <thead>
                                 <tr>
                                     <th style="color: #402b2b; font-family: Bahnschrift;">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                Заглавие
-                                            </div>
+                                        <div class="d-flex justify-content-between align-items-center">                                          
                                             <div>
                                                 @if (String.IsNullOrEmpty(ViewBag.TitleSortParam) || ViewBag.TitleSortParam.ToString() == "title_desc")
                                                 {
@@ -45,6 +42,9 @@
                                                         <span>&uarr;</span>
                                                     </a>
                                                 }
+                                            </div>
+                                            <div>
+                                                Заглавие
                                             </div>
                                         </div>
                                     </th>
@@ -73,6 +73,90 @@
                                         Редактирне
                                     </th>
                                 </tr>
+                                <tr>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchTitle" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchAuthor" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchGenre" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchLanguage" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchDescription" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchYearOfPublishing" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchPublisher" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="searchAvailability" class="form-control border-0">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach (Book book in Model.Books)
@@ -98,9 +182,6 @@
                                                 <span class="glyphicon glyphicon-trash" />
                                             </a>
                                             <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.BookId">
-                                                <span class="glyphicon glyphicon-edit" />
-                                            </a>
-                                            <a asp-controller="Book" asp-action="ScrapBook" asp-route-id="@book.BookId">
                                                 <span class="glyphicon glyphicon-edit" />
                                             </a>
                                         </td>

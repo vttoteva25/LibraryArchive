@@ -1,0 +1,56 @@
+﻿@model LibraryArchive.ViewModels.BookViewModel.EditBookViewModel
+
+<head>
+    <link href="~/css/custom-style.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/site.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/login-sigup.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="dark-body">
+    <div class="container">
+        <div class="row justify-content-center lower">
+            <div class="col-md-6 register-form-bg rounded">
+                <form asp-action="Edit" asp-controller="Book" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label class="control-label normal-text">Заглавие</label>
+                        <input readonly asp-for="Title" class="form-control normal-text" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Жанр/ове</label>
+                        <input readonly asp-for="Genres" class="form-control normal-text" />
+                        <span asp-validation-for="Genres" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Автор/и</label>
+                        <input readonly asp-for="Authors" class="form-control normal-text" />
+                        <span asp-validation-for="Authors" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Издателство</label>
+                        <input readonly asp-for="@Model.PublisherName" class="form-control normal-text" />
+                        <span asp-validation-for="PublisherName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Година на издаване</label>
+                        <input readonly asp-for="PublicationYear" class="form-control normal-text" />
+                        <span asp-validation-for="PublicationYear" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Описание</label>
+                        <textarea asp-for="Description" class="form-control normal-text" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+
+
+                    <div class="form-group align-items-center text-center">
+                        <input type="submit" id="redaction" value="Редактирай" class="btn btn-lg dark-button" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
