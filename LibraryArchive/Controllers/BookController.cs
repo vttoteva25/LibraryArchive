@@ -14,7 +14,7 @@ namespace LibraryArchive.Controllers
             _db = db;
         }
 
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchString, int page = 1, int pageSize = 20)
         {
             dynamic model = new ExpandoObject();
             model.BooksCount = _db.Books.Count();
@@ -27,8 +27,15 @@ namespace LibraryArchive.Controllers
                     .Include(b => b.Publisher)
                     .ToList();
 
-                model.Books = books;
-                model.FiltredBooksCount = 0;
+                var totalPages = (int)Math.Ceiling((double)books.Count() / pageSize);
+                var currentPageBooks = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                model.Books = currentPageBooks;
+                model.TotalPages = totalPages;
+                model.CurrentPage = page;
+                model.PageSize = pageSize;
+                model.SearchString = searchString;
+                model.FiltredBooksCount = model.Books.Count;
                 return View(model);
             }
             else
@@ -37,8 +44,6 @@ namespace LibraryArchive.Controllers
                 model.FiltredDeliveriesCount = _db.Books.Where(x => x.Title.Contains(searchString)).Count();
                 return View(model);
             }
-
-        }
-       
+        }       
     }
 }
