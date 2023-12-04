@@ -14,11 +14,13 @@ namespace LibraryArchive.Controllers
             _db = db;
         }
 
-        public IActionResult Index(string searchString, int page = 1, int pageSize = 20)
+        public IActionResult Index(string sortOrder, string searchString, int page = 1, int pageSize = 20)
         {
             dynamic model = new ExpandoObject();
             model.BooksCount = _db.Books.Count();
 
+            ViewBag.TitleSortParam = string.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
+           
             if (string.IsNullOrEmpty(searchString))
             {
                 var books = _db.Books
@@ -26,6 +28,16 @@ namespace LibraryArchive.Controllers
                     .Include(b => b.Genres)
                     .Include(b => b.Publisher)
                     .ToList();
+
+                switch (sortOrder)
+                {
+                    case "Title_desc":
+                        books = books.OrderByDescending(b => b.Title).ToList();
+                        break;                  
+                    default:
+                        books = books.OrderBy(b => b.Title).ToList();
+                        break;
+                }
 
                 var totalPages = (int)Math.Ceiling((double)books.Count() / pageSize);
                 var currentPageBooks = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();

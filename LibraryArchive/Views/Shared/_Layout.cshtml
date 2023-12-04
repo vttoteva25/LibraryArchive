@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/custom-style.css" />
     <link href="~/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     <header>
@@ -32,13 +35,12 @@
                             else
                             {
                                 <li class="nav-item dropdown">
-                                    <a style="padding: 5px;" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a style="padding: 5px; margin-top: 35px" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Книги
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="Book" asp-action="Index" asp-route-page="1" asp-route-pageSize="20" asp-route-searchString="">Всички</a>
-
                                         </li>
                                         <li>
                                             <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text dropdown-item nav resize" asp-controller="BorrowedBooks" asp-action="IndexBorrowedBooks">Взети</a>
@@ -53,7 +55,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Reader" asp-action="Index">Читатели</a>
+                                    <a style="padding: 5px; margin-top: 35px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Reader" asp-action="Index">Читатели</a>
                                 </li>
 
                                 <li class="nav-item toside">
