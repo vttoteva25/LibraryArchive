@@ -1,0 +1,200 @@
+﻿@model LibraryArchive.ViewModels.AuthorViewModel.AuthorViewModel;
+
+
+<body style="background-color: #c09999;">
+    <div id="authorResults">
+        <div class="row py-5 px-4">
+            <div class="col-md-10 mx-auto">
+                <div class="bg-white shadow rounded overflow-hidden">
+                    <div class="px-4 py-5" style="margin-top: 20px;">
+                        <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Книги</h2>
+                        <div class="row pt-4">
+                            <div class="col-6">
+                            </div>
+                            <form asp-controller="Author" asp-action="Index" method="get">
+                                <p style="color: #402b2b; font-family: Bahnschrift;">
+                                    Търсене:
+                                    <input style="color: #402b2b; font-family: Bahnschrift;" type="text" name="SearchString" value="@((string.IsNullOrEmpty(Model.SearchString)) ? null : Model.SearchString)" placeholder="име" oninput="updateAuthors()" />
+                                    <input style="color: #402b2b; font-family: Bahnschrift;" type="submit" value="Търси" />
+                                </p>
+                            </form>
+                        </div>
+
+
+                        @if (Model.Authors.Count != 0)
+                        {
+                            <table class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="color: #402b2b; font-family: Bahnschrift;">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    @if (String.IsNullOrEmpty(ViewBag.NameSortParam) || ViewBag.NameSortParam.ToString() == "name_desc")
+                                                    {
+                                                        <a asp-action="Index"
+                                                           asp-route-page="1"
+                                                           asp-route-sortOrder="@ViewBag.NameSortParam">
+                                                            <span>&darr;</span>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="Index"
+                                                           asp-route-page="1"
+                                                           asp-route-sortOrder="@ViewBag.NameSortParam">
+                                                            <span>&uarr;</span>
+                                                        </a>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    Име
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th style="color: #402b2b; font-family: Bahnschrift;">
+                                            Дата на раждане
+                                        </th>
+                                        <th style="color: #402b2b; font-family: Bahnschrift;">
+                                            Дата на смъртта
+                                        </th>
+                                        <th style="color: #402b2b; font-family: Bahnschrift;">
+                                            Биография
+                                        </th>
+                                        <th style="color: #402b2b; font-family: Bahnschrift;">
+                                            Книги
+                                        </th>
+                                        <th style="color: #402b2b; font-family: Bahnschrift;">
+                                            Редактирне
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (Author author in Model.Authors)
+                                    {
+                                        <tr>
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@author.Name</td>
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">@author.BirthDate.ToShortDateString()</td>
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">
+                                                @if (author.DeathDate != null)
+                                                {
+                                                    @author.DeathDate.Value.ToShortDateString()
+                                                }
+                                                else
+                                                {
+                                                    @author.DeathDate
+                                                }
+                                            </td>
+
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="15%" class="ellipsis" onclick="toggleContent(this)">
+                                                @ShortenDescription(author.Biography)
+                                                <div class="expanded-content" style="display: none;">@author.Biography</div>
+                                            </td>
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="15%">
+                                                @Html.Raw(string.Join("<br>", author.Books.Select(a => a.Title).Distinct()))
+                                            </td>
+                                            <td width="10%">
+                                                <a asp-controller="Book" asp-action="Delete" asp-route-id="@author.AuthorId">
+                                                    <span class="glyphicon glyphicon-trash" />
+                                                </a>
+                                                <a asp-controller="Book" asp-action="Edit" asp-route-id="@author.AuthorId">
+                                                    <span class="glyphicon glyphicon-edit" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="p-4 rounded shadow-sm bg-light">
+                                <p class="normal-text mb-0">Няма въведени автори.</p>
+                            </div>
+                        }
+
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-end" style="margin-right: 20px;">
+                            <li class="page-item">
+                                <a class="page-link" style="color: #402b2b; font-family: Bahnschrift;"
+                                   href="@Url.Action("Index", new { page = Model.CurrentPage-1, pageSize = Model.PageSize, searchString = Model.SearchString })" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link " style="color: #402b2b; font-family: Bahnschrift;"
+                                       href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize, searchString = Model.SearchString })">@i</a>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" style="color: #402b2b; font-family: Bahnschrift;"
+                                   href="@Url.Action("Index", new { page = Model.CurrentPage+1, pageSize = Model.PageSize, searchString = Model.SearchString })" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleContent(cell) {
+                const expandedContent = cell.querySelector('.expanded-content');
+                if (expandedContent.style.display === 'none') {
+                    expandedContent.style.display = 'block';
+                    cell.classList.add('expanded');
+                } else {
+                    expandedContent.style.display = 'none';
+                    cell.classList.remove('expanded');
+                }
+            }
+
+            function updateAuthors() {
+                var searchString = document.getElementsByName("SearchString")[0].value;
+
+                $.ajax({
+                    url: '/authors/index',
+                    method: 'GET',
+                    data: { searchString: searchString },
+                    success: function (data) {
+                        $('#authorResults').html($(data).find('#authorResults').html());
+                    },
+                    error: function (error) {
+                        console.error('Error fetching authors: ' + error);
+                    }
+                });
+                return false;
+            }
+
+            window.onload = function () {
+                var storedSearchString = localStorage.getItem('searchString');
+                if (storedSearchString) {
+                    document.getElementsByName("SearchString")[0].value = storedSearchString;
+                    updateAuthors();
+                }
+            }
+        </script>
+
+        @functions {
+            string ShortenDescription(string description, int maxLength = 50)
+            {
+                if (description.Length <= maxLength)
+                {
+                    return description;
+                }
+                else
+                {
+                    return description.Substring(0, maxLength) + "...";
+                }
+            }
+        }
+
+    </div>
+</body>
+

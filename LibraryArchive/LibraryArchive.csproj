@@ -20,4 +20,10 @@
     <PackageReference Include="XAct.Core.PCL" Version="0.0.5014" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Genre\" />
+    <Folder Include="Views\Reader\" />
+    <Folder Include="Views\Publisher\" />
+  </ItemGroup>
+
 </Project>

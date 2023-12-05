@@ -4,7 +4,6 @@ using LibraryArchive.ViewModels.BookViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LibraryArchive.Controllers
 {
