@@ -1,7 +1,4 @@
-﻿using LibraryArchive.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace LibraryArchive.ViewModels.BookViewModel
+﻿namespace LibraryArchive.ViewModels.BookViewModel
 {
     public class EditBookViewModel
     {

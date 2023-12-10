@@ -1,0 +1,54 @@
+﻿@model LibraryArchive.ViewModels.ReaderViewModel.EditUserViewModel
+
+<head>
+    <link href="~/css/custom-style.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/site.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/login-sigup.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="dark-body">
+    <div class="container">
+        <div class="row justify-content-center lower">
+            <div class="col-md-6 register-form-bg rounded">
+                <form asp-action="Edit" asp-controller="Reader" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label class="control-label normal-text">ЕГН</label>
+                        <input readonly asp-for="@Model.UserId" class="form-control normal-text" />
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Име</label>
+                        <input readonly asp-for="@Model.FirstName" class="form-control normal-text" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Фамилия</label>
+                        <input asp-for="@Model.LastName" class="form-control normal-text" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Дата на раждане</label>
+                        <input readonly asp-for="@Model.BirthDate" class="form-control normal-text" />
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Телефонен номер</label>
+                        <input asp-for="@Model.PhoneNumber" class="form-control normal-text" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Email</label>
+                        <input asp-for="@Model.Email" class="form-control normal-text" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group align-items-center text-center">
+                        <input type="submit" id="redaction" value="Редактирай" class="btn btn-lg dark-button" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

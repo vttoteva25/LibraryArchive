@@ -4,7 +4,6 @@ namespace LibraryArchive.ViewModels.ReaderViewModel
 {
     public class RegisterReaderViewModel
     {
-
         [Required(ErrorMessage = "Полето не може да е празно")]
         public string UserId { get; set; }
 
@@ -21,6 +20,5 @@ namespace LibraryArchive.ViewModels.ReaderViewModel
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
-
     }
 }

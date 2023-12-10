@@ -113,19 +113,9 @@ namespace LibraryArchive.Controllers
                 _db.Books.Update(updateBook);
                 _db.SaveChanges();
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Book");
             }
-            else
-            {
-                foreach (var modelState in ModelState.Values)
-                {
-                    foreach (var error in modelState.Errors)
-                    {
-                        // Log or display the error message
-                        Console.WriteLine(error.ErrorMessage);
-                    }
-                }
-            }
+           
             return View(model);
         }
     }

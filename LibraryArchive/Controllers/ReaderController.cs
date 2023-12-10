@@ -1,14 +1,11 @@
 ﻿using LibraryArchive.Data;
-using LibraryArchive.HelpingTools;
 using LibraryArchive.Models;
-using LibraryArchive.ViewModels.AuthorViewModel;
+using LibraryArchive.ViewModels.BookViewModel;
+using LibraryArchive.ViewModels.GenreViewModel;
 using LibraryArchive.ViewModels.ReaderViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
-using System.Reflection.PortableExecutable;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace LibraryArchive.Controllers
 {
@@ -26,16 +23,22 @@ namespace LibraryArchive.Controllers
         public IActionResult Index(string searchString,  int page = 1, int pageSize = 20)
         {
             var readers = _db.Users
-                 .Where(u => EF.Property<string>(u, "UserType") == "User")
-                 .Include(r => r.Role)
-                 .Include(b => b.Borrowings)
-                 .AsQueryable();
+             .Where(u => EF.Property<string>(u, "UserType") == "User")
+             .Include(r => r.Role)
+             .Include(b => b.Borrowings)
+             .ToList();
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                readers = readers.Where(reader => (reader.FirstName.Contains(searchString) || reader.LastName.Contains(searchString)) 
-                || string.Concat("reader.FirstName", " ", "reader.LastName").Contains(searchString));
+                searchString = searchString.ToLower();
+                readers = readers
+                    .Where(reader =>
+                        reader.FirstName.ToLower().Equals(searchString) ||reader.LastName.ToLower().Contains(searchString) ||
+                        (reader.FirstName + " " + reader.LastName).ToLower().Contains(searchString))
+                    .ToList();
             }
+
+            var result = readers.ToList();
 
             var totalReaders = readers.Count();
             var totalPages = (int)Math.Ceiling((double)totalReaders / pageSize);
@@ -97,6 +100,7 @@ namespace LibraryArchive.Controllers
             return View(model);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Register(RegisterReaderViewModel model)
         {
@@ -155,6 +159,79 @@ namespace LibraryArchive.Controllers
             return new DateTime(year, month % 40, day);
         }
 
-        #endregion       
+        #endregion
+
+        [Route("reader/delete/{id}")]
+        [HttpGet]
+        public IActionResult Delete([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var user = _db.Users
+                 .FirstOrDefault(u => u.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _db.Users.Remove(user);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index", "Reader");
+        }
+
+        public IActionResult Edit([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            User user = _db.Users?
+                    .FirstOrDefault(x => x.UserId.Equals(id));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            EditUserViewModel model = new EditUserViewModel();
+            model.UserId = id;
+            model.BirthDate = user.BirthDate;
+            model.Gender = user.Gender;
+            model.FirstName = user.FirstName;
+            model.LastName = user.LastName;
+            model.Email = user.Email;
+            model.PhoneNumber = user.PhoneNumber;           
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User updateUser = _db.Users?
+                    .FirstOrDefault(x => x.UserId.Equals(model.UserId));
+
+                if (updateUser is null)
+                {
+                    return NotFound();
+                }
+
+                updateUser.PhoneNumber = model.PhoneNumber;
+                updateUser.Email = model.Email;
+
+                _db.Users.Update(updateUser);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index", "Reader");
+            }
+            return View(model);
+        }
     }
 }
