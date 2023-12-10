@@ -120,7 +120,7 @@ namespace LibraryArchive.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("BookId", "UserId");
 
@@ -146,7 +146,7 @@ namespace LibraryArchive.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("BorrowingId");
 
@@ -222,14 +222,11 @@ namespace LibraryArchive.Migrations
             modelBuilder.Entity("LibraryArchive.Models.User", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -239,16 +236,25 @@ namespace LibraryArchive.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
@@ -256,7 +262,7 @@ namespace LibraryArchive.Migrations
 
                     b.ToTable("Users");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                    b.HasDiscriminator<string>("UserType").HasValue("User");
 
                     b.UseTphMappingStrategy();
                 });
@@ -277,10 +283,11 @@ namespace LibraryArchive.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "e31ef11b-67a2-4ffe-8f0d-93351c5fef90",
+                            UserId = "0344257575",
                             BirthDate = new DateTime(2003, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "viktoriya.toteva@abv.bg",
                             FirstName = "Виктория",
+                            Gender = "Жена",
                             LastName = "Тотева",
                             PhoneNumber = "0885904536",
                             RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",

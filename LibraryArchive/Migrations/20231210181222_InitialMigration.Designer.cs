@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryArchive.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231119210027_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231210181222_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,10 +61,6 @@ namespace LibraryArchive.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -84,15 +80,9 @@ namespace LibraryArchive.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("BookId");
 
                     b.HasIndex("PublisherId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Books");
                 });
@@ -127,6 +117,21 @@ namespace LibraryArchive.Migrations
                     b.ToTable("BookGenres");
                 });
 
+            modelBuilder.Entity("LibraryArchive.Models.BookUser", b =>
+                {
+                    b.Property<string>("BookId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("BookId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BookUser");
+                });
+
             modelBuilder.Entity("LibraryArchive.Models.Borrowing", b =>
                 {
                     b.Property<string>("BorrowingId")
@@ -144,7 +149,7 @@ namespace LibraryArchive.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("BorrowingId");
 
@@ -208,26 +213,23 @@ namespace LibraryArchive.Migrations
                         new
                         {
                             RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
-                            RoleName = "Librarian"
+                            RoleName = "Библиотекар"
                         },
                         new
                         {
                             RoleId = "aa5b79e4-d4ea-48f1-a764-40a33f557e36",
-                            RoleName = "Reader"
+                            RoleName = "Читател"
                         });
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.User", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -237,16 +239,25 @@ namespace LibraryArchive.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
@@ -254,7 +265,7 @@ namespace LibraryArchive.Migrations
 
                     b.ToTable("Users");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                    b.HasDiscriminator<string>("UserType").HasValue("User");
 
                     b.UseTphMappingStrategy();
                 });
@@ -264,11 +275,9 @@ namespace LibraryArchive.Migrations
                     b.HasBaseType("LibraryArchive.Models.User");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -277,10 +286,11 @@ namespace LibraryArchive.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "e31ef11b-67a2-4ffe-8f0d-93351c5fef90",
+                            UserId = "0344257575",
                             BirthDate = new DateTime(2003, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "viktoriya.toteva@abv.bg",
                             FirstName = "Виктория",
+                            Gender = "Жена",
                             LastName = "Тотева",
                             PhoneNumber = "0885904536",
                             RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
@@ -297,15 +307,7 @@ namespace LibraryArchive.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryArchive.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Publisher");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.BookAuthor", b =>
@@ -344,6 +346,25 @@ namespace LibraryArchive.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("LibraryArchive.Models.BookUser", b =>
+                {
+                    b.HasOne("LibraryArchive.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryArchive.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.Borrowing", b =>

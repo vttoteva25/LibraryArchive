@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Genre\" />
-    <Folder Include="Views\Reader\" />
     <Folder Include="Views\Publisher\" />
   </ItemGroup>
 

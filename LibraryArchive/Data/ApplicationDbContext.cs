@@ -13,11 +13,16 @@ namespace LibraryArchive.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("UserType")
+                .HasValue<User>("User")
+                .HasValue<Librarian>("Librarian");
+
             // Configure BookAuthor as a junction table with no primary key
             modelBuilder.Entity<BookAuthor>()
                 .HasKey(ba => new { ba.BookId, ba.AuthorId });
 
-            // Define the many-to-many relationship between Book and Author
+            // many-to-many relationship between Book and Author
             modelBuilder.Entity<Book>()
                 .HasMany(b => b.Authors)
                 .WithMany(a => a.Books)
@@ -35,7 +40,7 @@ namespace LibraryArchive.Data
             modelBuilder.Entity<BookGenre>()
                 .HasKey(ba => new { ba.BookId, ba.GenreId });
 
-            // Define the many-to-many relationship between Book and Genre
+            // many-to-many relationship between Book and Genre
             modelBuilder.Entity<Book>()
                 .HasMany(b => b.Genres)
                 .WithMany(a => a.Books)
@@ -53,7 +58,7 @@ namespace LibraryArchive.Data
             modelBuilder.Entity<BookUser>()
                 .HasKey(ba => new { ba.BookId, ba.UserId });
 
-            // Define the many-to-many relationship between Book and User
+            // many-to-many relationship between Book and User
             modelBuilder.Entity<Book>()
                 .HasMany(b => b.Users)
                 .WithMany(a => a.Books)
@@ -97,18 +102,19 @@ namespace LibraryArchive.Data
             modelBuilder.Entity<Librarian>().HasData(
                new Librarian
                {
-                   UserId = "e31ef11b-67a2-4ffe-8f0d-93351c5fef90",
+                   UserId = "0344257575",
                    FirstName = "Виктория",
                    LastName = "Тотева",
                    BirthDate = new DateTime(2003, 4, 25),
+                   Gender = "Жена",
                    PhoneNumber = "0885904536",
                    Username = "vttoteva",
                    Email = "viktoriya.toteva@abv.bg",
                    RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
                    Password = Hasher.Hash("123")
                }
-             );           
-
+             );
+           
             base.OnModelCreating(modelBuilder);          
         }
 

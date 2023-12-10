@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibraryArchive.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,42 +67,15 @@ namespace LibraryArchive.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "RoleId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
                     BookId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublicationYear = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublisherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Availability = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Scrapped = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -115,12 +88,32 @@ namespace LibraryArchive.Migrations
                         principalTable: "Publishers",
                         principalColumn: "PublisherId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Books_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleId");
                 });
 
             migrationBuilder.CreateTable(
@@ -172,11 +165,35 @@ namespace LibraryArchive.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookUser",
+                columns: table => new
+                {
+                    BookId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(10)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookUser", x => new { x.BookId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_BookUser_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookUser_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Borrowing",
                 columns: table => new
                 {
                     BorrowingId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     BookId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -201,14 +218,14 @@ namespace LibraryArchive.Migrations
                 columns: new[] { "RoleId", "RoleName" },
                 values: new object[,]
                 {
-                    { "aa5b79e4-d4ea-48f1-a764-40a33f557e36", "Reader" },
-                    { "e89e16d2-2a45-4977-a963-0fd740fbacb8", "Librarian" }
+                    { "aa5b79e4-d4ea-48f1-a764-40a33f557e36", "Читател" },
+                    { "e89e16d2-2a45-4977-a963-0fd740fbacb8", "Библиотекар" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "BirthDate", "Discriminator", "Email", "FirstName", "LastName", "Password", "PhoneNumber", "RoleId", "Username" },
-                values: new object[] { "e31ef11b-67a2-4ffe-8f0d-93351c5fef90", new DateTime(2003, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Librarian", "viktoriya.toteva@abv.bg", "Виктория", "Тотева", " ,?b?Y[?K-#Kp", "0885904536", "e89e16d2-2a45-4977-a963-0fd740fbacb8", "vttoteva" });
+                columns: new[] { "UserId", "BirthDate", "Email", "FirstName", "Gender", "LastName", "Password", "PhoneNumber", "RoleId", "UserType", "Username" },
+                values: new object[] { "0344257575", new DateTime(2003, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "viktoriya.toteva@abv.bg", "Виктория", "Жена", "Тотева", " ,?b?Y[?K-#Kp", "0885904536", "e89e16d2-2a45-4977-a963-0fd740fbacb8", "Librarian", "vttoteva" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookAuthors_AuthorId",
@@ -226,8 +243,8 @@ namespace LibraryArchive.Migrations
                 column: "PublisherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_UserId",
-                table: "Books",
+                name: "IX_BookUser_UserId",
+                table: "BookUser",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -256,6 +273,9 @@ namespace LibraryArchive.Migrations
                 name: "BookGenres");
 
             migrationBuilder.DropTable(
+                name: "BookUser");
+
+            migrationBuilder.DropTable(
                 name: "Borrowing");
 
             migrationBuilder.DropTable(
@@ -268,10 +288,10 @@ namespace LibraryArchive.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Publishers");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Publishers");
 
             migrationBuilder.DropTable(
                 name: "Roles");

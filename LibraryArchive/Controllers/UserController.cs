@@ -3,6 +3,7 @@ using LibraryArchive.HelpingTools;
 using LibraryArchive.Models;
 using LibraryArchive.ViewModels.HomeViewModel;
 using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 
 namespace LibraryArchive.Controllers
 {
@@ -82,6 +83,25 @@ namespace LibraryArchive.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        #endregion
+        #endregion       
+
+        [HttpGet]
+        [Route("librarian/profile/{username}")]
+        public IActionResult Profile([FromRoute] string username)
+        {
+            User user = _db.Librarians.FirstOrDefault(x => x.Username == username);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            dynamic model = new ExpandoObject();
+
+            model.User = user;
+            model.Role = _db.Roles.FirstOrDefault(x => x.RoleId == user.RoleId);
+
+            return View(model);
+        }
     }
 }

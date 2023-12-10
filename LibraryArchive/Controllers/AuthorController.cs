@@ -20,6 +20,8 @@ namespace LibraryArchive.Controllers
         {
             var query = _db.Authors.Include(b => b.Books).AsQueryable();
 
+            ViewBag.NameSortParam = string.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 query = query.Where(author => author.Name.Contains(searchString));
