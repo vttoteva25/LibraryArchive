@@ -70,25 +70,33 @@
                                     <a style="padding: 5px; margin-top: 35px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Author" asp-action="Index">Автори</a>
                                 </li>
 
-                                if (Logged.Administrator is not null)
+                                @if (Logged.Administrator is not null)
                                 {
                                     <li class="nav-item">
                                         <a style="padding: 5px; margin-top: 35px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Librarian" asp-action="Index">Библиотекари</a>
                                     </li>
                                 }
 
-                                <li class="nav-item toside">
-                                    <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="User" asp-action="Index">
-                                        Здравейте, @if (Logged.Librarian != null)
-                                        {
-                                            @Logged.Librarian.FirstName @Logged.Librarian.LastName
-                                        }
-                                        else
-                                        {
-                                            @Logged.Administrator.FirstName @Logged.Administrator.LastName
-                                        }
-                                    </a>
-                                </li>
+                                @if (Logged.Administrator is not null)
+                                {
+                                    <li class="nav-item">
+                                        <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize"
+                                           asp-controller="User" asp-action="Profile"
+                                           asp-route-id="@Logged.Administrator?.UserId">
+                                            Здравейте, @Logged.Administrator?.FirstName
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize"
+                                           asp-controller="User" asp-action="Profile"
+                                           asp-route-id="@Logged.Librarian?.UserId">
+                                            Здравейте, @Logged.Librarian?.FirstName
+                                        </a>
+                                    </li>
+                                }
                             }
                         </ul>
                     </div>

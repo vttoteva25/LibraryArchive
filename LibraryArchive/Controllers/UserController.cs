@@ -1,7 +1,9 @@
 ﻿using LibraryArchive.Data;
 using LibraryArchive.HelpingTools;
+using LibraryArchive.Models;
 using LibraryArchive.ViewModels.HomeViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
 
 namespace LibraryArchive.Controllers
@@ -19,8 +21,37 @@ namespace LibraryArchive.Controllers
         public IActionResult Index()
         {
             dynamic model = new ExpandoObject();
-            model.Librarians = _db.Librarians;
-            model.Administrators = _db.Administrators;
+            model.Librarians = _db.Librarians
+                .Where(u => EF.Property<string>(u, "UserType") == "Librarian");
+            model.Administrators = _db.Administrators
+                .Where(u => EF.Property<string>(u, "UserType") == "Administrator");
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("user/profile/{id}")]
+        public IActionResult Profile([FromRoute] string id)
+        {
+            Librarian user;
+            if(Logged.Librarian != null)
+            {
+                user = _db.Librarians?.FirstOrDefault(x => x.UserId == id);
+            }
+            else
+            {
+                user = _db.Administrators?.FirstOrDefault(x => x.UserId == id);
+            }
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            dynamic model = new ExpandoObject();
+
+            model.User = user;
+            model.Role = _db.Roles.FirstOrDefault(x => x.RoleId == user.RoleId);
+
             return View(model);
         }
 
@@ -46,7 +77,9 @@ namespace LibraryArchive.Controllers
 
                     if (_db.Administrators.Any(x => x.Username == username))
                     {
-                        if (_db.Administrators.FirstOrDefault(x => x.Username == username).Password == Hasher.Hash(password))
+                        if (_db.Administrators
+                            .Where(u => EF.Property<string>(u, "UserType") == "Administrator")?
+                            .FirstOrDefault(x => x.Username == username)?.Password == Hasher.Hash(password))
                         {
                             Logged.Administrator = _db.Administrators.FirstOrDefault(x => x.Username == username);
                         }
@@ -57,9 +90,11 @@ namespace LibraryArchive.Controllers
                     }
                     else if (_db.Librarians.Any(x => x.Username == username))
                     {
-                        if (_db.Librarians.FirstOrDefault(x => x.Username == username).Password == Hasher.Hash(password))
+                        if (_db.Librarians
+                            .Where(u => EF.Property<string>(u, "UserType") == "Librarian")?
+                            .FirstOrDefault(x => x.Username == username)?.Password == Hasher.Hash(password))
                         {
-                            Logged.Librarian = _db.Librarians.FirstOrDefault(x => x.Username == username);
+                            Logged.Librarian = _db.Librarians?.FirstOrDefault(x => x.Username == username);
                         }
                         else
                         {
@@ -88,8 +123,11 @@ namespace LibraryArchive.Controllers
 
         public IActionResult SigningOut()
         {
-            Logged.Librarian = null;
-            Logged.Administrator = null;
+            if(Logged.Librarian != null)
+                Logged.Librarian = null;
+
+            if(Logged.Administrator != null)
+                Logged.Administrator = null;
 
             return RedirectToAction("Index", "Home");
         }
