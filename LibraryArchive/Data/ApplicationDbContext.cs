@@ -8,15 +8,16 @@ namespace LibraryArchive.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            this.Users = this.Set<User>();           
+            this.Users = this.Set<User>();
+            this.Librarians = this.Set<Librarian>();
+            this.Administrators = this.Set<Administrator>();
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
                 .HasDiscriminator<string>("UserType")
                 .HasValue<User>("User")
-                .HasValue<Librarian>("Librarian");
+                .HasValue<Librarian>("Librarian");            
 
             // Configure BookAuthor as a junction table with no primary key
             modelBuilder.Entity<BookAuthor>()
@@ -88,9 +89,16 @@ namespace LibraryArchive.Data
             modelBuilder.Entity<Role>().HasData(
                new Role
                {
-                   RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
-                   RoleName = "Библиотекар"
+                   RoleId = "111e16d2-2a45-4977-a963-0fd740fbacb8",
+                   RoleName = "Администратор"
                });
+
+            modelBuilder.Entity<Role>().HasData(
+              new Role
+              {
+                  RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
+                  RoleName = "Библиотекар"
+              });
 
             modelBuilder.Entity<Role>().HasData(
                new Role
@@ -99,8 +107,8 @@ namespace LibraryArchive.Data
                    RoleName = "Читател"
                });
 
-            modelBuilder.Entity<Librarian>().HasData(
-               new Librarian
+            modelBuilder.Entity<Administrator>().HasData(
+               new Administrator
                {
                    UserId = "0344257575",
                    FirstName = "Виктория",
@@ -110,7 +118,7 @@ namespace LibraryArchive.Data
                    PhoneNumber = "0885904536",
                    Username = "vttoteva",
                    Email = "viktoriya.toteva@abv.bg",
-                   RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
+                   RoleId = "111e16d2-2a45-4977-a963-0fd740fbacb8",
                    Password = Hasher.Hash("123")
                }
              );
@@ -120,6 +128,7 @@ namespace LibraryArchive.Data
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Librarian> Librarians { get; set; }
+        public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Author> Authors { get; set; }
         public virtual DbSet<Borrowing> Borrowing { get; set; }

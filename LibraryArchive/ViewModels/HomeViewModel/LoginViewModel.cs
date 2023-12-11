@@ -2,7 +2,7 @@
 
 namespace LibraryArchive.ViewModels.HomeViewModel
 {
-    public class LoginLibrarianViewModel
+    public class LoginViewModel
     {
         [Required(ErrorMessage = "Полето за потребителско име не може да е празно")]
         public string Username { get; set; }

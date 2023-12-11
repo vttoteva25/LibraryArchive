@@ -209,6 +209,11 @@ namespace LibraryArchive.Migrations
                     b.HasData(
                         new
                         {
+                            RoleId = "111e16d2-2a45-4977-a963-0fd740fbacb8",
+                            RoleName = "Администратор"
+                        },
+                        new
+                        {
                             RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
                             RoleName = "Библиотекар"
                         },
@@ -279,6 +284,13 @@ namespace LibraryArchive.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasDiscriminator().HasValue("Librarian");
+                });
+
+            modelBuilder.Entity("LibraryArchive.Models.Administrator", b =>
+                {
+                    b.HasBaseType("LibraryArchive.Models.Librarian");
+
+                    b.HasDiscriminator().HasValue("Administrator");
 
                     b.HasData(
                         new
@@ -290,7 +302,7 @@ namespace LibraryArchive.Migrations
                             Gender = "Жена",
                             LastName = "Тотева",
                             PhoneNumber = "0885904536",
-                            RoleId = "e89e16d2-2a45-4977-a963-0fd740fbacb8",
+                            RoleId = "111e16d2-2a45-4977-a963-0fd740fbacb8",
                             Password = " ,?b?Y[?K-#Kp",
                             Username = "vttoteva"
                         });
@@ -372,7 +384,7 @@ namespace LibraryArchive.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("LibraryArchive.Models.User", "User")
+                    b.HasOne("LibraryArchive.Models.Librarian", "User")
                         .WithMany("Borrowings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -397,7 +409,7 @@ namespace LibraryArchive.Migrations
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("LibraryArchive.Models.User", b =>
+            modelBuilder.Entity("LibraryArchive.Models.Librarian", b =>
                 {
                     b.Navigation("Borrowings");
                 });

@@ -10,7 +10,7 @@ namespace LibraryArchive.Models
 
         [ForeignKey("User Id")]
         public string UserId { get; set; }
-        public User User { get; set; }
+        public Librarian User { get; set; }
 
         [ForeignKey("Book Id")]
         public string BookId { get; set; }

@@ -26,7 +26,7 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                     <div>
                         <ul class="navbar-nav ml-auto">
-                            @if (Logged.Librarian is null)
+                            @if (Logged.Librarian is null && Logged.Administrator is null)
                             {
                                 <li class="nav-item toside">
                                     <a id="showMore" class="navbar-text nav resize" asp-controller="User" asp-action="Login">Вход</a>
@@ -70,9 +70,23 @@
                                     <a style="padding: 5px; margin-top: 35px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Author" asp-action="Index">Автори</a>
                                 </li>
 
+                                if (Logged.Administrator is not null)
+                                {
+                                    <li class="nav-item">
+                                        <a style="padding: 5px; margin-top: 35px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="Librarian" asp-action="Index">Библиотекари</a>
+                                    </li>
+                                }
+
                                 <li class="nav-item toside">
                                     <a style="padding: 5px; text-decoration: none;" id="showMore" class="navbar-text nav resize" asp-controller="User" asp-action="Index">
-                                        Здравейте, @Logged.Librarian.FirstName @Logged.Librarian.LastName
+                                        Здравейте, @if (Logged.Librarian != null)
+                                        {
+                                            @Logged.Librarian.FirstName @Logged.Librarian.LastName
+                                        }
+                                        else
+                                        {
+                                            @Logged.Administrator.FirstName @Logged.Administrator.LastName
+                                        }
                                     </a>
                                 </li>
                             }

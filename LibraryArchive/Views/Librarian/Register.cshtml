@@ -1,0 +1,80 @@
+﻿@model LibraryArchive.ViewModels.LibrarianViewModel.RegisterLibrarianViewModel;
+@{
+    ViewData["Title"] = "Register | Library Archive";
+}
+
+<head>
+    <link href="~/css/custom-style.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/site.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/login-signup.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="dark-body">
+    <div class="container">
+        <div class="row justify-content-center lower">
+            <div class="col-md-6 register-form-bg rounded">
+                <form asp-action="Register" asp-controller="Librarian" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group text-center">
+                        <h2 class="normal-heading">Създай библиотекраски акаунт</h2>
+                        <br />
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">* Име</label>
+                        <input asp-for="FirstName" class="form-control normal-text" placeholder="Въведете името..." />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">* Фамилия</label>
+                        <input asp-for="LastName" class="form-control normal-text" placeholder="Въведете фамилията..." />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">* ЕГН</label>
+                        <input type="LibrarianId" asp-for="LibrarianId" class="form-control normal-text" placeholder="Въведете ЕГН..." />
+                        <span asp-validation-for="LibrarianId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Пол</label>
+                        <select asp-for="Gender" class="browser-default custom-select">
+                            <option selected=""></option>
+                            <option>Мъж</option>
+                            <option>Жена</option>
+                            <option>Друг</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Телефонен номер</label>
+                        <input type="PhoneNumber" asp-for="PhoneNumber" class="form-control normal-text" placeholder="Въведете телефонeн номер..." />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">E-mail</label>
+                        <input type="Email" asp-for="Email" class="form-control normal-text" placeholder="Въведете E-mail адрес..." />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Потребителско име</label>
+                        <input type="Username" asp-for="Username" class="form-control normal-text" placeholder="Въведете потребителско име..." />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Парола</label>
+                        <input type="password" asp-for="Password" class="form-control normal-text" placeholder="Въведете парола..." />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Потвърди паролата</label>
+                        <input type="ConfirmPassword" asp-for="ConfirmPassword" class="form-control normal-text" placeholder="Потвърдете паролата..." />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-group align-items-center text-center">
+                        <input type="submit" id="register" value="Регистрация" class="btn btn-lg dark-button" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

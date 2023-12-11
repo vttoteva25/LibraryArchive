@@ -1,7 +1,5 @@
 ﻿using LibraryArchive.Data;
 using LibraryArchive.Models;
-using LibraryArchive.ViewModels.BookViewModel;
-using LibraryArchive.ViewModels.GenreViewModel;
 using LibraryArchive.ViewModels.ReaderViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +22,8 @@ namespace LibraryArchive.Controllers
         {
             var readers = _db.Users
              .Where(u => EF.Property<string>(u, "UserType") == "User")
+             .OfType<User>()
              .Include(r => r.Role)
-             .Include(b => b.Borrowings)
              .ToList();
 
             if (!string.IsNullOrEmpty(searchString))
@@ -65,7 +63,7 @@ namespace LibraryArchive.Controllers
         [Route("reader/profile/{userId}")]
         public IActionResult Profile([FromRoute] string userId)
         {
-            User user = _db.Users
+            var user = _db.Users
                  .Where(u => EF.Property<string>(u, "UserType") == "User")
                  .Include(r => r.Role)
                  .Include(b => b.Borrowings).AsQueryable()
@@ -106,7 +104,7 @@ namespace LibraryArchive.Controllers
         {
             if (ModelState.IsValid)
             {             
-                User user = new User();
+                var user = new User();
                 user.UserId = model.UserId;
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
@@ -134,7 +132,7 @@ namespace LibraryArchive.Controllers
                 catch (Exception)
                 {
 
-                    ModelState.AddModelError("UserIdExists", "Потребител със такова ЕГН име вече съществува!");
+                    ModelState.AddModelError("UserIdExists", "Потребител със такова ЕГН вече съществува!");
                     return View(model);
                 }
             }
@@ -189,7 +187,7 @@ namespace LibraryArchive.Controllers
                 return NotFound();
             }
 
-            User user = _db.Users?
+            var user = _db.Users?
                     .FirstOrDefault(x => x.UserId.Equals(id));
 
             if (user == null)
@@ -215,7 +213,7 @@ namespace LibraryArchive.Controllers
         {
             if (ModelState.IsValid)
             {
-                User updateUser = _db.Users?
+                var updateUser = _db.Users?
                     .FirstOrDefault(x => x.UserId.Equals(model.UserId));
 
                 if (updateUser is null)

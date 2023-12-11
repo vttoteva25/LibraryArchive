@@ -1,6 +1,5 @@
 ﻿using LibraryArchive.Data;
 using LibraryArchive.HelpingTools;
-using LibraryArchive.Models;
 using LibraryArchive.ViewModels.HomeViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
@@ -19,8 +18,10 @@ namespace LibraryArchive.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Librarian> librariansList = _db.Librarians;
-            return View(librariansList);
+            dynamic model = new ExpandoObject();
+            model.Librarians = _db.Librarians;
+            model.Administrators = _db.Administrators;
+            return View(model);
         }
 
         #region LoginUser
@@ -28,13 +29,13 @@ namespace LibraryArchive.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            LoginLibrarianViewModel model = new LoginLibrarianViewModel();
+            LoginViewModel model = new LoginViewModel();
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Login(LoginLibrarianViewModel model)
+        public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -42,13 +43,23 @@ namespace LibraryArchive.Controllers
                 {
                     string username = model.Username;
                     string password = model.Password;
-                    Librarian librarian = new Librarian();
 
-                    if (_db.Librarians.Any(x => x.Username == username))
+                    if (_db.Administrators.Any(x => x.Username == username))
+                    {
+                        if (_db.Administrators.FirstOrDefault(x => x.Username == username).Password == Hasher.Hash(password))
+                        {
+                            Logged.Administrator = _db.Administrators.FirstOrDefault(x => x.Username == username);
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Incorrect username or password");
+                        }
+                    }
+                    else if (_db.Librarians.Any(x => x.Username == username))
                     {
                         if (_db.Librarians.FirstOrDefault(x => x.Username == username).Password == Hasher.Hash(password))
                         {
-                            librarian = _db.Librarians.FirstOrDefault(x => x.Username == username);
+                            Logged.Librarian = _db.Librarians.FirstOrDefault(x => x.Username == username);
                         }
                         else
                         {
@@ -58,9 +69,7 @@ namespace LibraryArchive.Controllers
                     else
                     {
                         throw new ArgumentException("Incorrect username or password");
-                    }
-
-                    Logged.Librarian = librarian;
+                    }                    
                 }
 
                 catch (Exception)
@@ -72,6 +81,7 @@ namespace LibraryArchive.Controllers
 
             return RedirectToAction("Index", "Home"); ;
         }
+
         #endregion
 
         #region SignOut
@@ -79,29 +89,11 @@ namespace LibraryArchive.Controllers
         public IActionResult SigningOut()
         {
             Logged.Librarian = null;
+            Logged.Administrator = null;
 
             return RedirectToAction("Index", "Home");
         }
 
         #endregion       
-
-        [HttpGet]
-        [Route("librarian/profile/{username}")]
-        public IActionResult Profile([FromRoute] string username)
-        {
-            User user = _db.Librarians.FirstOrDefault(x => x.Username == username);
-
-            if (user is null)
-            {
-                return NotFound();
-            }
-
-            dynamic model = new ExpandoObject();
-
-            model.User = user;
-            model.Role = _db.Roles.FirstOrDefault(x => x.RoleId == user.RoleId);
-
-            return View(model);
-        }
     }
 }

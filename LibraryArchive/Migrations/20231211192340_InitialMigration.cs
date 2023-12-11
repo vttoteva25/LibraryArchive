@@ -218,6 +218,7 @@ namespace LibraryArchive.Migrations
                 columns: new[] { "RoleId", "RoleName" },
                 values: new object[,]
                 {
+                    { "111e16d2-2a45-4977-a963-0fd740fbacb8", "Администратор" },
                     { "aa5b79e4-d4ea-48f1-a764-40a33f557e36", "Читател" },
                     { "e89e16d2-2a45-4977-a963-0fd740fbacb8", "Библиотекар" }
                 });
@@ -225,7 +226,7 @@ namespace LibraryArchive.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "BirthDate", "Email", "FirstName", "Gender", "LastName", "Password", "PhoneNumber", "RoleId", "UserType", "Username" },
-                values: new object[] { "0344257575", new DateTime(2003, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "viktoriya.toteva@abv.bg", "Виктория", "Жена", "Тотева", " ,?b?Y[?K-#Kp", "0885904536", "e89e16d2-2a45-4977-a963-0fd740fbacb8", "Librarian", "vttoteva" });
+                values: new object[] { "0344257575", new DateTime(2003, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "viktoriya.toteva@abv.bg", "Виктория", "Жена", "Тотева", " ,?b?Y[?K-#Kp", "0885904536", "111e16d2-2a45-4977-a963-0fd740fbacb8", "Administrator", "vttoteva" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookAuthors_AuthorId",
