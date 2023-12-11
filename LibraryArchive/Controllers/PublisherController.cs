@@ -53,7 +53,7 @@ namespace LibraryArchive.Controllers
             return View(model);
         }
 
-        [Route("Publisher/DeletePublisher/{id}")]
+        [Route("publisher/deletePublisher/{id}")]
         [HttpGet]
         public IActionResult DeletePublisher([FromRoute] string id)
         {

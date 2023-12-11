@@ -24,7 +24,7 @@
                         <form asp-controller="Reader" asp-action="Index" method="get">
                             <p style="color: #402b2b; font-family: Bahnschrift;">
                                 Търсене:
-                                    <input style="color: #402b2b; font-family: Bahnschrift;" type="text" name="SearchString" value="@((string.IsNullOrEmpty(Model.SearchString)) ? null : Model.SearchString)" placeholder="име" oninput="debounce(updateReaders, 300)" />
+                                <input style="color: #402b2b; font-family: Bahnschrift;" type="text" name="SearchString" value="@((string.IsNullOrEmpty(Model.SearchString)) ? null : Model.SearchString)" placeholder="име" oninput="debounce(updateReaders, 300)" />
                             </p>
                         </form>
                     </div>

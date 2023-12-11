@@ -2,7 +2,7 @@
 {
     public class EditBookViewModel
     {
-        public string Id { get; set; }
+        public string BookId { get; set; }
         public string Title { get; set; }
         public string PublicationYear { get; set; }
         public string Description { get; set; }

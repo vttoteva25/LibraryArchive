@@ -66,7 +66,6 @@ namespace LibraryArchive.Controllers
             var user = _db.Users
                  .Where(u => EF.Property<string>(u, "UserType") == "User")
                  .Include(r => r.Role)
-                 .Include(b => b.Borrowings).AsQueryable()
                 .FirstOrDefault(x => x.UserId == userId);                
 
             if (user is null)
@@ -74,19 +73,40 @@ namespace LibraryArchive.Controllers
                 return NotFound();
             }
 
-            dynamic model = new ExpandoObject();
-
-            model.User = user;
-            model.Role = _db.Roles.FirstOrDefault(x => x.RoleId == user.RoleId);
-            var borrowings = _db.Borrowing.Where(x => x.UserId == userId);
-            model.Borrowings = borrowings;
-            model.BorrowingsCount = borrowings.Count();
+            var borrowings = _db.Borrowing.Where(x => x.UserId == userId).ToList();
             var previousBorrowings = borrowings.ToList().Where(b => b.ReturnDate is not null);
-            model.ReturnedBooks = _db.Books.Where(book => previousBorrowings.Any(br=> br.BookId.Equals(book.BookId)));
+            var returnedBooks = previousBorrowings.Any() ? 
+                _db.Books.Where(book => previousBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() : 
+                new List<Book>();
             var currentBorrowings = borrowings.ToList().Where(b => b.ReturnDate is null);
-            model.BooksToReturn = _db.Books.Where(book => currentBorrowings.Any(br => br.BookId.Equals(book.BookId)));
+            var booksToReturn = currentBorrowings.Any() ?
+                _db.Books.Where(book => currentBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() :
+                new List<Book>();
 
-            return View(model);
+            var profileViewModel = new ProfileViewModel()
+            {
+                User = user,
+                Borrowings = borrowings,
+                BorrowingsCount = borrowings.Count,
+                ReturnedBooks = returnedBooks.Select(book => 
+                    new BorrowedBookViewModel()
+                    {
+                        BookId = book.BookId,
+                        Title = book.Title,
+                        BorrowDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.BorrowDate.ToShortDateString(),
+                        ReturnDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.ReturnDate.ToString()
+                    }).ToList(),
+                BooksToReturn = booksToReturn.Select(book => 
+                    new BorrowedBookViewModel()
+                    {
+                        BookId = book.BookId,
+                        Title = book.Title,
+                        BorrowDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.BorrowDate.ToShortDateString(),
+                        ReturnDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.ReturnDate?.ToString() ?? default
+                    }).ToList(),
+            };          
+
+            return View(profileViewModel);
         }
 
         #region RegisterUser

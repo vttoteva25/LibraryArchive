@@ -6,16 +6,13 @@
         <div class="col-md-10 mx-auto">
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 py-5" style="margin-top: 20px;">
-                    <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Книги</h2>
-                    <div class="row pt-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="col-6">
+                            <h2 class="mb-0" style="text-indent: 10px;">Книги</h2>
                         </div>
-                        <form asp-controller="Book" asp-action="Index" method="get">
-                            <p style="color: #402b2b; font-family: Bahnschrift;">
-                                Търсене: <input style="color: #402b2b; font-family: Bahnschrift;" type="text" name="SearchString" placeholder="заглавие" />
-                                <input style="color: #402b2b; font-family: Bahnschrift;" type="submit" value="Търси" />
-                            </p>
-                        </form>
+                        <div class="col-6 text-right">
+                            <a asp-controller="Book" asp-action="Add" class="btn btn-primary">Добави книга</a>
+                        </div>
                     </div>
 
                     @if (Model.BooksCount != 0)
