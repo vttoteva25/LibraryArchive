@@ -12,30 +12,32 @@ namespace LibraryArchive.Controllers
         public BorrowController(ApplicationDbContext db)
         {
             _db = db;
-        }   
+        }
 
+        [Route("borrow/{userId}")]
         [HttpGet]
         public IActionResult Borrow([FromRoute] string userId)
         {
             BorrowBookViewModel model = new BorrowBookViewModel();
-            model.UserId = userId;
+            ViewBag.UserId = userId;
             return View(model);
         }
 
-        [ValidateAntiForgeryToken]
+        [Route("borrow/{userId}")]
         [HttpPost]
-        public IActionResult Borrow(BorrowBookViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Borrow([FromRoute] string userId, [Bind("BookId")] BorrowBookViewModel model)
         {
             var borrowing = new Borrowing()
             {
                 BorrowingId = Guid.NewGuid().ToString(),
                 BookId = model.BookId,
-                UserId = model.UserId,
+                UserId = userId,
                 BorrowDate = DateTime.Now,
             };
 
             var book = _db.Books.FirstOrDefault(b => b.BookId == model.BookId);
-            if (book != null)
+            if (book == null)
             {
                 return NotFound();
             }
@@ -58,11 +60,11 @@ namespace LibraryArchive.Controllers
                 }
             }
             
-            return RedirectToAction("Profile", "Reader", model.UserId);
+            return RedirectToAction("Profile", "Reader", new { userId });
         }
 
-        [Route("borrowing/return/{bookId}")]
-        [HttpPost]
+        [Route("{userId}/borrow/return/{bookId}")]
+        [HttpGet]
         public IActionResult Return([FromRoute] string bookId, [FromRoute] string userId)
         {
             var book = _db.Books.FirstOrDefault(b => b.BookId == bookId);
@@ -101,7 +103,7 @@ namespace LibraryArchive.Controllers
                 }
             }
 
-            return RedirectToAction("Profile", "Reader", userId);
+            return RedirectToAction("Profile", "Reader", new { userId });
         }
 
     }

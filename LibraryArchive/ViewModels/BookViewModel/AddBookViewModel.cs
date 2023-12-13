@@ -13,16 +13,13 @@ namespace LibraryArchive.ViewModels.BookViewModel
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Изберете поне един автор")]
-        public List<string> Author { get; set; }
-        public List<Author> Authors { get; set; }
+        public List<string> BookAuthorsIds { get; set; }
 
         [Required(ErrorMessage = "Изберете издателство")]
-        public string Publisher { get; set; }
-        public List<Publisher> PublisherList { get; set; }
+        public string PublisherId { get; set; }
 
         [Required(ErrorMessage = "Изберете поне един жанр")]
         public List<string> BookGenresIds { get; set; }
-        public List<Genre> Genres { get; set; }
         public string PublicationYear { get; set; }
         public string Language {  get; set; }
         public bool Scrapped { get; set; } = false;

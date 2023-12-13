@@ -19,7 +19,7 @@ namespace LibraryArchive.ViewModels.ReaderViewModel
     {
         public string Title { get; set; }
         public string BookId { get; set; }
-        public string BorrowDate { get; set; }
-        public string ReturnDate { get; set; }
+        public DateTime BorrowDate { get; set; }
+        public DateTime ReturnDate { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using LibraryArchive.Models;
 using LibraryArchive.ViewModels.ReaderViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Dynamic;
 
 namespace LibraryArchive.Controllers
 {
@@ -76,11 +75,11 @@ namespace LibraryArchive.Controllers
             var borrowings = _db.Borrowing.Where(x => x.UserId == userId).ToList();
             var previousBorrowings = borrowings.ToList().Where(b => b.ReturnDate is not null);
             var returnedBooks = previousBorrowings.Any() ? 
-                _db.Books.Where(book => previousBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() : 
+                _db.Books.AsEnumerable().Where(book => previousBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() : 
                 new List<Book>();
             var currentBorrowings = borrowings.ToList().Where(b => b.ReturnDate is null);
             var booksToReturn = currentBorrowings.Any() ?
-                _db.Books.Where(book => currentBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() :
+                _db.Books.AsEnumerable().Where(book => currentBorrowings.Any(br => br.BookId == book.BookId)).ToList() :
                 new List<Book>();
 
             var profileViewModel = new ProfileViewModel()
@@ -93,16 +92,16 @@ namespace LibraryArchive.Controllers
                     {
                         BookId = book.BookId,
                         Title = book.Title,
-                        BorrowDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.BorrowDate.ToShortDateString(),
-                        ReturnDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.ReturnDate.ToString()
+                        BorrowDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.BorrowDate ?? default,
+                        ReturnDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.ReturnDate ?? default
                     }).ToList(),
                 BooksToReturn = booksToReturn.Select(book => 
                     new BorrowedBookViewModel()
                     {
                         BookId = book.BookId,
                         Title = book.Title,
-                        BorrowDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.BorrowDate.ToShortDateString(),
-                        ReturnDate = previousBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.ReturnDate?.ToString() ?? default
+                        BorrowDate = currentBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.BorrowDate ?? default,
+                        ReturnDate = currentBorrowings?.FirstOrDefault(bd => bd.BookId == book.BookId)?.ReturnDate ?? default
                     }).ToList(),
             };          
 
@@ -124,23 +123,23 @@ namespace LibraryArchive.Controllers
         {
             if (ModelState.IsValid)
             {             
-                var user = new User();
-                user.UserId = model.UserId;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.PhoneNumber = model.PhoneNumber;
-                user.Gender = model.Gender;
-                user.BirthDate = GetBirthDateFromUserId(model.UserId);
-                user.Email = model.Email;
+                var reader = new User();
+                reader.UserId = model.UserId;
+                reader.FirstName = model.FirstName;
+                reader.LastName = model.LastName;
+                reader.PhoneNumber = model.PhoneNumber;
+                reader.Gender = model.Gender;
+                reader.BirthDate = GetBirthDateFromUserId(model.UserId);
+                reader.Email = model.Email;
                 Role role = new Role();               
                 role = _db.Roles.FirstOrDefault(x => x.RoleName == "Читател");
-                user.Role = role;
+                reader.Role = role;
                               
                 try
                 {
                     if (!CheckForExistingUser(model.UserId))
                     {
-                        _db.Users.Add(user);
+                        _db.Users.Add(reader);
                         _db.SaveChanges();
                     }
                     else
@@ -157,7 +156,7 @@ namespace LibraryArchive.Controllers
                 }
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Reader");
         }
 
         private bool CheckForExistingUser(string userId) => _db.Users.Any(x => x.UserId == userId);

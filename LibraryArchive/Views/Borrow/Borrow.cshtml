@@ -13,18 +13,13 @@
     <div class="container">
         <div class="row justify-content-center lower">
             <div class="col-md-6 register-form-bg rounded">
-                <form asp-action="Borrow" asp-controller="Borrowing" method="post">
+                <form asp-action="Borrow" asp-controller="Borrow" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group text-center">
                         <h2 class="normal-heading">Вземане на книга</h2>
                         <br />
                         <div asp-validation-summary="All" class="text-danger"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label normal-text">Читател</label>
-                        <input readonly asp-for="UserId" class="form-control normal-text" placeholder="Читател" />
-                        <span asp-validation-for="UserId" class="text-danger"></span>
-                    </div>
+                    </div>                   
                     <div class="form-group">
                         <label class="control-label normal-text">Библиотечен номер на книгата</label>
                         <input asp-for="BookId" class="form-control normal-text" placeholder="Библиотечен номер на книгата" />

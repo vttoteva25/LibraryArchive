@@ -1,6 +1,7 @@
 ﻿using LibraryArchive.Data;
 using LibraryArchive.Models;
 using LibraryArchive.ViewModels.BookViewModel;
+using LibraryArchive.ViewModels.ReaderViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
@@ -60,6 +61,83 @@ namespace LibraryArchive.Controllers
             }
         }
 
+        [Route("book/add")]
+        [HttpGet]
+        public IActionResult Add()
+        {
+            var model = new AddBookViewModel();
+            ViewBag.Genres = _db.Genres.ToList();
+            ViewBag.Publishers = _db.Publishers.ToList();
+            ViewBag.Authors = _db.Authors.ToList();
+            return View(model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Add(AddBookViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var book = new Book();
+                book.BookId = model.BookId;
+                book.Title = model.Title;
+                book.Description = model.Description;
+                book.PublicationYear = model.PublicationYear;
+                book.Scrapped = model.Scrapped;
+                book.Availability = model.Availability;
+                book.Language = model.Language;
+
+                var publisher = _db.Publishers.FirstOrDefault(p => p.PublisherId == model.PublisherId);
+                if (publisher != null)
+                {
+                    book.Publisher = publisher;
+                    book.PublisherId = publisher.PublisherId;
+                }
+
+                var authors = _db.Authors.Where(a => model.BookAuthorsIds.Contains(a.AuthorId)).ToList();
+                book.Authors = authors;
+                var booksAuthors = authors.Select(ba => new BookAuthor()
+                {
+                    AuthorId = ba.AuthorId,
+                    Author = ba,
+                    BookId = book.BookId,
+                    Book = book,
+                }).ToList();
+                
+                var genres = _db.Genres.Where(g => model.BookGenresIds.Contains(g.GenreId)).ToList();
+                book.Genres = genres;
+                var booksGenres = genres.Select(bg => new BookGenre()
+                {
+                    Book = book,
+                    BookId = book.BookId,
+                    Genre = bg,
+                    GenreId = bg.GenreId,
+                }).ToList();
+
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _db.Books.Add(book);
+                        booksAuthors.Select(ba => _db.BookAuthors.Add(ba));
+                        booksGenres.Select(bg => _db.BookGenres.Add(bg));
+                        _db.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        ModelState.AddModelError("Books", "Възникна проблем при добавянето на книга");
+                        return View(model);
+                    }
+                }
+            }
+         
+            return RedirectToAction("Index", "Book");
+        }
+
+        private bool CheckForExistingBook(string bookId) => _db.Books.Any(x => x.BookId == bookId);
+
         [Route("book/edit/{id}")]
         [HttpGet]
         public IActionResult Edit([FromRoute] string id)
@@ -81,7 +159,7 @@ namespace LibraryArchive.Controllers
             }
 
             EditBookViewModel model = new EditBookViewModel();
-            model.Id = id;
+            model.BookId = id;
             model.Title = book.Title;
             model.Genres = string.Join(", \n", book.Genres.Select(g => g.Name));
             model.Description = book.Description;
@@ -102,7 +180,7 @@ namespace LibraryArchive.Controllers
                     .Include(b => b.Authors)
                     .Include(b => b.Genres)
                     .Include(b => b.Publisher)
-                    .FirstOrDefault(x => x.BookId.Equals(model.Id));
+                    .FirstOrDefault(x => x.BookId.Equals(model.BookId));
                 updateBook.Description = model.Description;
 
                 if (updateBook is null)
