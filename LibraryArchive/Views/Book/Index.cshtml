@@ -188,8 +188,9 @@
                                             </td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.PublicationYear</td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.Publisher.Name</td>
-                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.Availability</td>
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.</td>
                                             <td width="10%">
+                                                Available
                                                 <a asp-controller="Book" asp-action="Delete" asp-route-id="@book.BookId">
                                                     <span class="glyphicon glyphicon-trash" style="color:black" />
                                                 </a>

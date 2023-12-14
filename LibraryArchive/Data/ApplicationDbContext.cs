@@ -107,6 +107,27 @@ namespace LibraryArchive.Data
                    RoleName = "Читател"
                });
 
+            modelBuilder.Entity<Author>().HasData(
+                new Author
+                {
+                    AuthorId = "ec207e3a-abf7-4e50-9930-70186a374e09",
+                    Name = "Неизвестен"
+                });
+
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre
+                { 
+                    GenreId = "dab5806d-aa55-477c-9e3f-78cfc61ba1d8",
+                    Name = "Неопределен"
+                });
+
+            modelBuilder.Entity<Publisher>().HasData(
+                new Publisher
+                {
+                    PublisherId = "e2cd83bb-9f9b-41bf-9ff3-059df8c0b71e",
+                    Name = "Неизвестно"
+                });
+
             modelBuilder.Entity<Administrator>().HasData(
                new Administrator
                {
@@ -131,7 +152,7 @@ namespace LibraryArchive.Data
         public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Author> Authors { get; set; }
-        public virtual DbSet<Borrowing> Borrowing { get; set; }
+        public virtual DbSet<Borrowing> Borrowings { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }

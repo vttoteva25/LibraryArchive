@@ -53,12 +53,14 @@ namespace LibraryArchive.Controllers
                 model.PageSize = pageSize;
                 model.SearchString = searchString;
                 model.FiltredBooksCount = model.Books.Count;
+
                 return View(model);
             }
             else
             {
                 model.Books = _db.Books.Where(x => x.Title.Contains(searchString));
                 model.FiltredBooksCount = _db.Books.Where(x => x.Title.Contains(searchString)).Count();
+
                 return View(model);
             }
         }
@@ -114,7 +116,7 @@ namespace LibraryArchive.Controllers
                 .Include(b => b.Genres)
                 .Include(b => b.Publisher)
                 .ToList()
-                .Where(b => !b.Scrapped && b.Availability);
+                .Where(b => !b.Scrapped && b.Available);
 
             switch (sortOrder)
             {
@@ -150,9 +152,9 @@ namespace LibraryArchive.Controllers
                 .Include(b => b.Genres)
                 .Include(b => b.Publisher)
                 .ToList()
-                .Where(b => !b.Scrapped && !b.Availability);
+                .Where(b => !b.Scrapped && !b.Available);
 
-            var borrowings = _db.Borrowing.AsEnumerable()
+            var borrowings = _db.Borrowings.AsEnumerable()
                 .Where(b => books.Any(book => book.BookId == b.BookId) && b.ReturnDate == null).ToList();
 
             var readers = _db.Users
@@ -213,7 +215,7 @@ namespace LibraryArchive.Controllers
                 book.Description = model.Description;
                 book.PublicationYear = model.PublicationYear;
                 book.Scrapped = model.Scrapped;
-                book.Availability = model.Availability;
+                book.Available = model.Available;
                 book.Language = model.Language;
 
                 var publisher = _db.Publishers.FirstOrDefault(p => p.PublisherId == model.PublisherId);
@@ -336,7 +338,7 @@ namespace LibraryArchive.Controllers
                 return NotFound();
             }
             book.Scrapped = true;
-            book.Availability = false;
+            book.Available = false;
 
             _db.Books.Update(book);
             _db.SaveChanges();

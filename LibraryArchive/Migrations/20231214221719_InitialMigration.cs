@@ -21,7 +21,7 @@ namespace LibraryArchive.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeathDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Biography = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Biography = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,8 +46,8 @@ namespace LibraryArchive.Migrations
                 {
                     PublisherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Website = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,7 +75,7 @@ namespace LibraryArchive.Migrations
                     PublicationYear = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublisherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Availability = table.Column<bool>(type: "bit", nullable: false),
+                    Available = table.Column<bool>(type: "bit", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Scrapped = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -189,7 +189,7 @@ namespace LibraryArchive.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Borrowing",
+                name: "Borrowings",
                 columns: table => new
                 {
                     BorrowingId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -200,18 +200,33 @@ namespace LibraryArchive.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Borrowing", x => x.BorrowingId);
+                    table.PrimaryKey("PK_Borrowings", x => x.BorrowingId);
                     table.ForeignKey(
-                        name: "FK_Borrowing_Books_BookId",
+                        name: "FK_Borrowings_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "BookId");
                     table.ForeignKey(
-                        name: "FK_Borrowing_Users_UserId",
+                        name: "FK_Borrowings_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Authors",
+                columns: new[] { "AuthorId", "Biography", "BirthDate", "DeathDate", "Name" },
+                values: new object[] { "ec207e3a-abf7-4e50-9930-70186a374e09", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Неизвестен" });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "GenreId", "Name" },
+                values: new object[] { "dab5806d-aa55-477c-9e3f-78cfc61ba1d8", "Неопределен" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "PublisherId", "Address", "Name", "Website" },
+                values: new object[] { "e2cd83bb-9f9b-41bf-9ff3-059df8c0b71e", null, "Неизвестно", null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
@@ -249,13 +264,13 @@ namespace LibraryArchive.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Borrowing_BookId",
-                table: "Borrowing",
+                name: "IX_Borrowings_BookId",
+                table: "Borrowings",
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Borrowing_UserId",
-                table: "Borrowing",
+                name: "IX_Borrowings_UserId",
+                table: "Borrowings",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -277,7 +292,7 @@ namespace LibraryArchive.Migrations
                 name: "BookUser");
 
             migrationBuilder.DropTable(
-                name: "Borrowing");
+                name: "Borrowings");
 
             migrationBuilder.DropTable(
                 name: "Authors");

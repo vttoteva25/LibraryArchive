@@ -41,13 +41,13 @@ namespace LibraryArchive.Controllers
             {
                 return NotFound();
             }
-            book.Availability = false;
+            book.Available = false;
 
             using (var transaction = _db.Database.BeginTransaction())
             {
                 try
                 {
-                    _db.Borrowing.Add(borrowing);
+                    _db.Borrowings.Add(borrowing);
                     _db.Books.Update(book);
                     _db.SaveChanges();
                     transaction.Commit();
@@ -72,7 +72,7 @@ namespace LibraryArchive.Controllers
             {
                 return NotFound();
             }
-            book.Availability = true;
+            book.Available = true;
 
             var user = _db.Users.FirstOrDefault(u => u.UserId == userId);
             if (user == null)
@@ -80,7 +80,7 @@ namespace LibraryArchive.Controllers
                 return NotFound();
             }
 
-            var borrowing = _db.Borrowing.FirstOrDefault(b => b.BookId == bookId && b.UserId == userId);
+            var borrowing = _db.Borrowings.FirstOrDefault(b => b.BookId == bookId && b.UserId == userId);
             if (borrowing == null)
             {
                 return NotFound();
@@ -91,7 +91,7 @@ namespace LibraryArchive.Controllers
             {
                 try
                 {
-                    _db.Borrowing.Update(borrowing);
+                    _db.Borrowings.Update(borrowing);
                     _db.Books.Update(book);
                     _db.SaveChanges();
                     transaction.Commit();

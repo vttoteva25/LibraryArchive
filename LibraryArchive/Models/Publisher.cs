@@ -10,10 +10,8 @@ namespace LibraryArchive.Models
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
-        [Required]
         public string? Website { get; set; }
 
         public ICollection<Book> Books { get; set; } = new List<Book>();

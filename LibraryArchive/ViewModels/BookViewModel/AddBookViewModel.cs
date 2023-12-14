@@ -23,6 +23,6 @@ namespace LibraryArchive.ViewModels.BookViewModel
         public string PublicationYear { get; set; }
         public string Language {  get; set; }
         public bool Scrapped { get; set; } = false;
-        public bool Availability { get; set; } = false;
+        public bool Available { get; set; } = false;
     }
 }

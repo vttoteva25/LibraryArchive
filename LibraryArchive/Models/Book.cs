@@ -6,7 +6,7 @@ namespace LibraryArchive.Models
     public class Book
     {
         [Key]
-        public string BookId { get; set; }
+        public string BookId { get; set; } 
 
         [Required]
         public string Title { get; set; }
@@ -22,7 +22,7 @@ namespace LibraryArchive.Models
         public Publisher Publisher { get; set; }
 
         [Required]
-        public bool Availability { get; set; }
+        public bool Available { get; set; } = false;
 
         [Required]
         public string Language { get; set; }       

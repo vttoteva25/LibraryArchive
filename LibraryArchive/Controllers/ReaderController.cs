@@ -72,7 +72,7 @@ namespace LibraryArchive.Controllers
                 return NotFound();
             }
 
-            var borrowings = _db.Borrowing.Where(x => x.UserId == userId).ToList();
+            var borrowings = _db.Borrowings.Where(x => x.UserId == userId).ToList();
             var previousBorrowings = borrowings.ToList().Where(b => b.ReturnDate is not null);
             var returnedBooks = previousBorrowings.Any() ? 
                 _db.Books.AsEnumerable().Where(book => previousBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() : 

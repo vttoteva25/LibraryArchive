@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryArchive.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231211192340_InitialMigration")]
+    [Migration("20231214221719_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -31,7 +31,6 @@ namespace LibraryArchive.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Biography")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("BirthDate")
@@ -47,6 +46,14 @@ namespace LibraryArchive.Migrations
                     b.HasKey("AuthorId");
 
                     b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            AuthorId = "ec207e3a-abf7-4e50-9930-70186a374e09",
+                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Неизвестен"
+                        });
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.Book", b =>
@@ -54,7 +61,7 @@ namespace LibraryArchive.Migrations
                     b.Property<string>("BookId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("Availability")
+                    b.Property<bool>("Available")
                         .HasColumnType("bit");
 
                     b.Property<string>("Description")
@@ -157,7 +164,7 @@ namespace LibraryArchive.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Borrowing");
+                    b.ToTable("Borrowings");
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.Genre", b =>
@@ -172,6 +179,13 @@ namespace LibraryArchive.Migrations
                     b.HasKey("GenreId");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            GenreId = "dab5806d-aa55-477c-9e3f-78cfc61ba1d8",
+                            Name = "Неопределен"
+                        });
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.Publisher", b =>
@@ -180,7 +194,6 @@ namespace LibraryArchive.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -188,12 +201,18 @@ namespace LibraryArchive.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Website")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PublisherId");
 
                     b.ToTable("Publishers");
+
+                    b.HasData(
+                        new
+                        {
+                            PublisherId = "e2cd83bb-9f9b-41bf-9ff3-059df8c0b71e",
+                            Name = "Неизвестно"
+                        });
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.Role", b =>
