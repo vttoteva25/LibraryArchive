@@ -8,7 +8,7 @@
                 <div class="px-4 py-5" style="margin-top: 20px;">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="col-6">
-                            <h2 class="mb-0" style="text-indent: 10px;">Книги</h2>
+                            <h2 class="mb-0" style="text-indent: 10px;">Налични книги</h2>
                         </div>
                         <div class="col-6 text-right">
                             <a asp-controller="Book" asp-action="Add" class="btn btn-info">Добави книга</a>
@@ -66,9 +66,6 @@
                                         </th>
                                         <th style="color: #402b2b; font-family: Bahnschrift;">
                                             Издателство
-                                        </th>
-                                        <th style="color: #402b2b; font-family: Bahnschrift;">
-                                            Наличност
                                         </th>
                                         <th style="color: #402b2b; font-family: Bahnschrift;">
                                             Редактирне
@@ -156,16 +153,6 @@
                                             </div>
                                         </th>
                                         <th>
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <span class="glyphicon glyphicon-search"></span>
-                                                </div>
-                                                <div class="col">
-                                                    <input type="text" name="searchAvailability" class="form-control border-0">
-                                                </div>
-                                            </div>
-                                        </th>
-                                        <th>
                                         </th>
                                     </tr>
                                 </thead>
@@ -188,7 +175,6 @@
                                             </td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.PublicationYear</td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.Publisher.Name</td>
-                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.Availability</td>
                                             <td width="10%">
                                                 <a asp-controller="Book" asp-action="Delete" asp-route-id="@book.BookId">
                                                     <span class="glyphicon glyphicon-trash" style="color:black" />
@@ -213,7 +199,7 @@
                     else
                     {
                         <div class="p-4 rounded shadow-sm bg-light">
-                            <p class="normal-text mb-0">Няма книги в библиотеката.</p>
+                            <p class="normal-text mb-0">Няма налични книги в библиотеката.</p>
                         </div>
                     }
                 </div>
@@ -221,7 +207,7 @@
                     <ul class="pagination justify-content-end" style="margin-right: 20px;">
                         <li class="page-item">
                             <a class="page-link" style="color: #402b2b; font-family: Bahnschrift;"
-                               href="@Url.Action("Index", new { page = Model.CurrentPage-1, pageSize = Model.PageSize, searchString = Model.SearchString })" aria-label="Previous">
+                               href="@Url.Action("Index", new { page = Model.CurrentPage-1, pageSize = Model.PageSize})" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only"></span>
                             </a>
@@ -230,12 +216,12 @@
                         {
                             <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
                                 <a class="page-link " style="color: #402b2b; font-family: Bahnschrift;"
-                                   href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize, searchString = Model.SearchString })">@i</a>
+                                   href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize})">@i</a>
                             </li>
                         }
                         <li class="page-item">
                             <a class="page-link" style="color: #402b2b; font-family: Bahnschrift;"
-                               href="@Url.Action("Index", new { page = Model.CurrentPage+1, pageSize = Model.PageSize, searchString = Model.SearchString })" aria-label="Next">
+                               href="@Url.Action("Index", new { page = Model.CurrentPage+1, pageSize = Model.PageSize})" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only"></span>
                             </a>

@@ -5,6 +5,7 @@ using LibraryArchive.ViewModels.ReaderViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
+using BorrowedBookViewModel = LibraryArchive.ViewModels.BookViewModel.BorrowedBookViewModel;
 
 namespace LibraryArchive.Controllers
 {
@@ -17,13 +18,14 @@ namespace LibraryArchive.Controllers
             _db = db;
         }
 
+        [HttpGet]
         public IActionResult Index(string sortOrder, string searchString, int page = 1, int pageSize = 20)
         {
             dynamic model = new ExpandoObject();
             model.BooksCount = _db.Books.Count();
 
             ViewBag.TitleSortParam = string.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
-           
+
             if (string.IsNullOrEmpty(searchString))
             {
                 var books = _db.Books
@@ -36,7 +38,7 @@ namespace LibraryArchive.Controllers
                 {
                     case "Title_desc":
                         books = books.OrderByDescending(b => b.Title).ToList();
-                        break;                  
+                        break;
                     default:
                         books = books.OrderBy(b => b.Title).ToList();
                         break;
@@ -59,6 +61,133 @@ namespace LibraryArchive.Controllers
                 model.FiltredBooksCount = _db.Books.Where(x => x.Title.Contains(searchString)).Count();
                 return View(model);
             }
+        }
+
+        [Route("books/scrapped")]
+        [HttpGet]
+        public IActionResult IndexScrappedBooks(string sortOrder, int page = 1, int pageSize = 20)
+        {
+            dynamic model = new ExpandoObject();           
+
+            ViewBag.TitleSortParam = string.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
+
+            var books = _db.Books
+                .Include(b => b.Authors)
+                .Include(b => b.Genres)
+                .Include(b => b.Publisher)
+                .ToList()
+                .Where(b => b.Scrapped);
+
+            switch (sortOrder)
+            {
+                case "Title_desc":
+                    books = books.OrderByDescending(b => b.Title).ToList();
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title).ToList();
+                    break;
+            }
+
+            var totalPages = (int)Math.Ceiling((double)books.Count() / pageSize);
+            var currentPageBooks = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            model.BooksCount = books.Count();
+            model.Books = currentPageBooks;
+            model.TotalPages = totalPages;
+            model.CurrentPage = page;
+            model.PageSize = pageSize;
+            model.FiltredBooksCount = model.Books.Count;
+
+            return View(model);
+        }
+
+        [Route("books/available")]
+        [HttpGet]
+        public IActionResult IndexAvailableBooks(string sortOrder, int page = 1, int pageSize = 20)
+        {
+            dynamic model = new ExpandoObject();
+
+            ViewBag.TitleSortParam = string.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
+
+            var books = _db.Books
+                .Include(b => b.Authors)
+                .Include(b => b.Genres)
+                .Include(b => b.Publisher)
+                .ToList()
+                .Where(b => !b.Scrapped && b.Availability);
+
+            switch (sortOrder)
+            {
+                case "Title_desc":
+                    books = books.OrderByDescending(b => b.Title).ToList();
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title).ToList();
+                    break;
+            }
+
+            var totalPages = (int)Math.Ceiling((double)books.Count() / pageSize);
+            var currentPageBooks = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            model.BooksCount = books.Count();
+            model.Books = currentPageBooks;
+            model.TotalPages = totalPages;
+            model.CurrentPage = page;
+            model.PageSize = pageSize;
+
+            return View(model);
+        }
+
+        [Route("books/borrowed")]
+        [HttpGet]
+        public IActionResult IndexBorrowedBooks(string sortOrder, int page = 1, int pageSize = 20)
+        {
+            dynamic model = new ExpandoObject();
+            ViewBag.TitleSortParam = string.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
+
+            var books = _db.Books
+                .Include(b => b.Authors)
+                .Include(b => b.Genres)
+                .Include(b => b.Publisher)
+                .ToList()
+                .Where(b => !b.Scrapped && !b.Availability);
+
+            var borrowings = _db.Borrowing.AsEnumerable()
+                .Where(b => books.Any(book => book.BookId == b.BookId) && b.ReturnDate == null).ToList();
+
+            var readers = _db.Users
+                .Where(u => EF.Property<string>(u, "UserType") == "User")
+                .OfType<User>()
+                .AsEnumerable()
+                .Where(u => borrowings.Any(b => b.UserId == u.UserId))
+                .ToList();
+
+            switch (sortOrder)
+            {
+                case "Title_desc":
+                    books = books.OrderByDescending(b => b.Title).ToList();
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title).ToList();
+                    break;
+            }
+
+            var totalPages = (int)Math.Ceiling((double)books.Count() / pageSize);
+            var currentPageBooks = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            model.BooksCount = books.Count();      
+            model.BooksBorrowingsReadersList = books
+                    .Select(book => (
+                        Book: book,
+                        Borrowing: borrowings.FirstOrDefault(b => b.BookId == book.BookId),
+                        Reader: readers.FirstOrDefault(u => borrowings.Any(b => b.UserId == u.UserId))
+                    ))
+                    .ToList();
+            model.TotalPages = totalPages;
+            model.CurrentPage = page;
+            model.PageSize = pageSize;
+
+            return View(model);
         }
 
         [Route("book/add")]
@@ -103,7 +232,7 @@ namespace LibraryArchive.Controllers
                     BookId = book.BookId,
                     Book = book,
                 }).ToList();
-                
+
                 var genres = _db.Genres.Where(g => model.BookGenresIds.Contains(g.GenreId)).ToList();
                 book.Genres = genres;
                 var booksGenres = genres.Select(bg => new BookGenre()
@@ -132,7 +261,7 @@ namespace LibraryArchive.Controllers
                     }
                 }
             }
-         
+
             return RedirectToAction("Index", "Book");
         }
 
@@ -193,8 +322,26 @@ namespace LibraryArchive.Controllers
 
                 return RedirectToAction("Index", "Book");
             }
-           
+
             return View(model);
+        }
+
+        [Route("book/scrap/{id}")]
+        [HttpGet]
+        public IActionResult Scrap([FromRoute] string id)
+        {
+            var book = _db.Books.FirstOrDefault(b => b.BookId.Equals(id));
+            if (book == null)
+            {
+                return NotFound();
+            }
+            book.Scrapped = true;
+            book.Availability = false;
+
+            _db.Books.Update(book);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index", "Book");
         }
     }
 }
