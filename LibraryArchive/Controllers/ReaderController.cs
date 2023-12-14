@@ -19,9 +19,9 @@ namespace LibraryArchive.Controllers
         [HttpGet]
         public IActionResult Index(string searchString,  int page = 1, int pageSize = 20)
         {
-            var readers = _db.Users
-             .Where(u => EF.Property<string>(u, "UserType") == "User")
-             .OfType<User>()
+            var readers = _db.Readers
+             .Where(u => EF.Property<string>(u, "UserType") == "Reader")
+             .OfType<Reader>()
              .Include(r => r.Role)
              .ToList();
 
@@ -59,20 +59,20 @@ namespace LibraryArchive.Controllers
         }
 
         [HttpGet]
-        [Route("reader/profile/{userId}")]
-        public IActionResult Profile([FromRoute] string userId)
+        [Route("reader/profile/{readerNumber}")]
+        public IActionResult Profile([FromRoute] string readerNumber)
         {
-            var user = _db.Users
-                 .Where(u => EF.Property<string>(u, "UserType") == "User")
+            var reader = _db.Readers
+                 .Where(u => EF.Property<string>(u, "UserType") == "Reader")
                  .Include(r => r.Role)
-                .FirstOrDefault(x => x.UserId == userId);                
+                .FirstOrDefault(x => x.ReaderNumber == readerNumber);                
 
-            if (user is null)
+            if (reader is null)
             {
                 return NotFound();
             }
 
-            var borrowings = _db.Borrowings.Where(x => x.UserId == userId).ToList();
+            var borrowings = _db.Borrowings.Where(x => x.UserId == reader.UserId).ToList();
             var previousBorrowings = borrowings.ToList().Where(b => b.ReturnDate is not null);
             var returnedBooks = previousBorrowings.Any() ? 
                 _db.Books.AsEnumerable().Where(book => previousBorrowings.Any(br => br.BookId.Equals(book.BookId))).ToList() : 
@@ -84,7 +84,7 @@ namespace LibraryArchive.Controllers
 
             var profileViewModel = new ProfileViewModel()
             {
-                User = user,
+                Reader = reader,
                 Borrowings = borrowings,
                 BorrowingsCount = borrowings.Count,
                 ReturnedBooks = returnedBooks.Select(book => 
@@ -123,8 +123,9 @@ namespace LibraryArchive.Controllers
         {
             if (ModelState.IsValid)
             {             
-                var reader = new User();
+                var reader = new Reader();
                 reader.UserId = model.UserId;
+                reader.ReaderNumber = model.ReaderNumber;
                 reader.FirstName = model.FirstName;
                 reader.LastName = model.LastName;
                 reader.PhoneNumber = model.PhoneNumber;
@@ -139,7 +140,7 @@ namespace LibraryArchive.Controllers
                 {
                     if (!CheckForExistingUser(model.UserId))
                     {
-                        _db.Users.Add(reader);
+                        _db.Readers.Add(reader);
                         _db.SaveChanges();
                     }
                     else
@@ -178,62 +179,63 @@ namespace LibraryArchive.Controllers
 
         #endregion
 
-        [Route("reader/delete/{id}")]
+        [Route("reader/delete/{readerNumber}")]
         [HttpGet]
-        public IActionResult Delete([FromRoute] string id)
+        public IActionResult Delete([FromRoute] string readerNumber)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(readerNumber))
                 return NotFound();
 
-            var user = _db.Users
-                 .FirstOrDefault(u => u.UserId == id);
+            var reader = _db.Readers
+                 .FirstOrDefault(u => u.ReaderNumber == readerNumber);
 
-            if (user == null)
+            if (reader == null)
             {
                 return NotFound();
             }
 
-            _db.Users.Remove(user);
+            _db.Readers.Remove(reader);
             _db.SaveChanges();
 
             return RedirectToAction("Index", "Reader");
         }
 
-        public IActionResult Edit([FromRoute] string id)
+        public IActionResult Edit([FromRoute] string readerNumber)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(readerNumber))
             {
                 return NotFound();
             }
 
-            var user = _db.Users?
-                    .FirstOrDefault(x => x.UserId.Equals(id));
+            var reader = _db.Readers?
+                    .FirstOrDefault(x => x.ReaderNumber.Equals(readerNumber));
 
-            if (user == null)
+            if (reader == null)
             {
                 return NotFound();
             }
 
-            EditUserViewModel model = new EditUserViewModel();
-            model.UserId = id;
-            model.BirthDate = user.BirthDate;
-            model.Gender = user.Gender;
-            model.FirstName = user.FirstName;
-            model.LastName = user.LastName;
-            model.Email = user.Email;
-            model.PhoneNumber = user.PhoneNumber;           
+            EditReaderViewModel model = new EditReaderViewModel();
+            model.ReaderId = reader.UserId;
+            model.ReaderNumber = readerNumber;
+            model.BirthDate = reader.BirthDate;
+            model.Gender = reader.Gender;
+            model.FirstName = reader.FirstName;
+            model.LastName = reader.LastName;
+            model.Email = reader.Email;
+            model.PhoneNumber = reader.PhoneNumber;           
 
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(EditUserViewModel model)
+        public IActionResult Edit(EditReaderViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var updateUser = _db.Users?
-                    .FirstOrDefault(x => x.UserId.Equals(model.UserId));
+                    .FirstOrDefault(x => x.UserId.Equals(model.ReaderId));
 
                 if (updateUser is null)
                 {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryArchive.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231214221719_InitialMigration")]
+    [Migration("20231214230443_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -151,6 +151,9 @@ namespace LibraryArchive.Migrations
                     b.Property<DateTime>("BorrowDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ReaderUserId")
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
@@ -161,6 +164,8 @@ namespace LibraryArchive.Migrations
                     b.HasKey("BorrowingId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("ReaderUserId");
 
                     b.HasIndex("UserId");
 
@@ -308,6 +313,21 @@ namespace LibraryArchive.Migrations
                     b.HasDiscriminator().HasValue("Librarian");
                 });
 
+            modelBuilder.Entity("LibraryArchive.Models.Reader", b =>
+                {
+                    b.HasBaseType("LibraryArchive.Models.User");
+
+                    b.Property<string>("ReaderNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("ReaderNumber")
+                        .IsUnique()
+                        .HasFilter("[ReaderNumber] IS NOT NULL");
+
+                    b.HasDiscriminator().HasValue("Reader");
+                });
+
             modelBuilder.Entity("LibraryArchive.Models.Administrator", b =>
                 {
                     b.HasBaseType("LibraryArchive.Models.Librarian");
@@ -406,6 +426,10 @@ namespace LibraryArchive.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("LibraryArchive.Models.Reader", null)
+                        .WithMany("Borrowings")
+                        .HasForeignKey("ReaderUserId");
+
                     b.HasOne("LibraryArchive.Models.Librarian", "User")
                         .WithMany("Borrowings")
                         .HasForeignKey("UserId")
@@ -432,6 +456,11 @@ namespace LibraryArchive.Migrations
                 });
 
             modelBuilder.Entity("LibraryArchive.Models.Librarian", b =>
+                {
+                    b.Navigation("Borrowings");
+                });
+
+            modelBuilder.Entity("LibraryArchive.Models.Reader", b =>
                 {
                     b.Navigation("Borrowings");
                 });

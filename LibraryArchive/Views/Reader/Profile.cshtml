@@ -18,11 +18,12 @@
             <div class="px-3 py-4" style="margin-top: 20px;">
                 <div class="p-4 my-2 rounded shadow-sm bg-light">
                     <h5 class="mb-2 ml-3">Информация</h5>
-                    <p class="normal-text mb-1 ml-3">Име: @Model.User.FirstName</p>
-                    <p class="normal-text mb-1 ml-3">Фамилия: @Model.User.LastName</p>
-                    <p class="normal-text mb-1 ml-3">Дата на раждане: @Model.User.BirthDate.ToShortDateString()</p>
-                    <p class="normal-text mb-1 ml-3">Телефонен номер: @Model.User.PhoneNumber</p>
-                    <p class="normal-text mb-1 ml-3">E-mail: @Model.User.Email</p>
+                    <p class="normal-text mb-1 ml-3">Име: @Model.Reader.ReaderNumber</p>
+                    <p class="normal-text mb-1 ml-3">Име: @Model.Reader.FirstName</p>
+                    <p class="normal-text mb-1 ml-3">Фамилия: @Model.Reader.LastName</p>
+                    <p class="normal-text mb-1 ml-3">Дата на раждане: @Model.Reader.BirthDate.ToShortDateString()</p>
+                    <p class="normal-text mb-1 ml-3">Телефонен номер: @Model.Reader.PhoneNumber</p>
+                    <p class="normal-text mb-1 ml-3">E-mail: @Model.Reader.Email</p>
                 </div>
                 <div class="p-4 my-2 rounded shadow-sm bg-light">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -30,7 +31,7 @@
                             <h3 class="mb-0">Читателска история</h3>
                         </div>
                         <div class="col-6 text-right">
-                            <a asp-controller="Borrow" asp-action="Borrow" asp-route-userId="@Model.User.UserId" class="btn btn-primary">Вземи книга</a>
+                            <a asp-controller="Borrow" asp-action="Borrow" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-primary">Вземи книга</a>
                         </div>
                     </div>
                     @if (Model.BorrowingsCount > 0)
@@ -55,7 +56,7 @@
                                                     <td>@book.Title</td>
                                                     <td>@book.BorrowDate</td>
                                                     <td>
-                                                        <a asp-controller="Borrow" asp-action="Return" asp-route-bookId="@book.BookId" asp-route-userId="@Model.User.UserId" class="btn btn-primary">Връщане</a>
+                                                        <a asp-controller="Borrow" asp-action="Return" asp-route-bookId="@book.BookId" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-primary">Връщане</a>
                                                     </td>
                                                 </tr>
                                             }

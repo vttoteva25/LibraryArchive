@@ -1,11 +1,9 @@
 ﻿using LibraryArchive.Data;
 using LibraryArchive.Models;
 using LibraryArchive.ViewModels.BookViewModel;
-using LibraryArchive.ViewModels.ReaderViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
-using BorrowedBookViewModel = LibraryArchive.ViewModels.BookViewModel.BorrowedBookViewModel;
 
 namespace LibraryArchive.Controllers
 {
@@ -157,9 +155,9 @@ namespace LibraryArchive.Controllers
             var borrowings = _db.Borrowings.AsEnumerable()
                 .Where(b => books.Any(book => book.BookId == b.BookId) && b.ReturnDate == null).ToList();
 
-            var readers = _db.Users
-                .Where(u => EF.Property<string>(u, "UserType") == "User")
-                .OfType<User>()
+            var readers = _db.Readers.AsEnumerable()
+                .Where(u => EF.Property<string>(u, "UserType") == "Reader")
+                .OfType<Reader>()
                 .AsEnumerable()
                 .Where(u => borrowings.Any(b => b.UserId == u.UserId))
                 .ToList();

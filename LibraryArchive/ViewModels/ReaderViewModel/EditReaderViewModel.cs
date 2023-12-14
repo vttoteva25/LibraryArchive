@@ -1,8 +1,9 @@
 ﻿namespace LibraryArchive.ViewModels.ReaderViewModel
 {
-    public class EditUserViewModel
+    public class EditReaderViewModel
     {
-        public string UserId {  get; set; }
+        public string ReaderId {  get; set; }
+        public string ReaderNumber { get; set; }
 
         public string FirstName { get; set; }
 

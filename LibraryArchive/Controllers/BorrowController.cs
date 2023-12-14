@@ -14,25 +14,31 @@ namespace LibraryArchive.Controllers
             _db = db;
         }
 
-        [Route("borrow/{userId}")]
+        [Route("borrow/{readerNumber}")]
         [HttpGet]
-        public IActionResult Borrow([FromRoute] string userId)
+        public IActionResult Borrow([FromRoute] string readerNumber)
         {
             BorrowBookViewModel model = new BorrowBookViewModel();
-            ViewBag.UserId = userId;
+            ViewBag.ReaderNumber = readerNumber;
             return View(model);
         }
 
-        [Route("borrow/{userId}")]
+        [Route("borrow/{readerNumber}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Borrow([FromRoute] string userId, [Bind("BookId")] BorrowBookViewModel model)
+        public IActionResult Borrow([FromRoute] string readerNumber, [Bind("BookId")] BorrowBookViewModel model)
         {
+            var reader = _db.Readers.FirstOrDefault(r => r.ReaderNumber == readerNumber);
+            if (reader == null)
+            {
+                return NotFound();
+            }
+
             var borrowing = new Borrowing()
             {
                 BorrowingId = Guid.NewGuid().ToString(),
                 BookId = model.BookId,
-                UserId = userId,
+                UserId = reader.UserId,
                 BorrowDate = DateTime.Now,
             };
 
@@ -60,12 +66,12 @@ namespace LibraryArchive.Controllers
                 }
             }
             
-            return RedirectToAction("Profile", "Reader", new { userId });
+            return RedirectToAction("Profile", "Reader", new { readerNumber });
         }
 
-        [Route("{userId}/borrow/return/{bookId}")]
+        [Route("{readerNumber}/borrow/return/{bookId}")]
         [HttpGet]
-        public IActionResult Return([FromRoute] string bookId, [FromRoute] string userId)
+        public IActionResult Return([FromRoute] string bookId, [FromRoute] string readerNumber)
         {
             var book = _db.Books.FirstOrDefault(b => b.BookId == bookId);
             if (book == null)
@@ -74,13 +80,13 @@ namespace LibraryArchive.Controllers
             }
             book.Available = true;
 
-            var user = _db.Users.FirstOrDefault(u => u.UserId == userId);
-            if (user == null)
+            var reader = _db.Readers.FirstOrDefault(u => u.ReaderNumber == readerNumber);
+            if (reader == null)
             {
                 return NotFound();
             }
 
-            var borrowing = _db.Borrowings.FirstOrDefault(b => b.BookId == bookId && b.UserId == userId);
+            var borrowing = _db.Borrowings.FirstOrDefault(b => b.BookId == bookId && b.UserId == reader.UserId);
             if (borrowing == null)
             {
                 return NotFound();
@@ -103,7 +109,7 @@ namespace LibraryArchive.Controllers
                 }
             }
 
-            return RedirectToAction("Profile", "Reader", new { userId });
+            return RedirectToAction("Profile", "Reader", new { readerNumber });
         }
 
     }

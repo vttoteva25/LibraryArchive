@@ -17,7 +17,11 @@ namespace LibraryArchive.Data
             modelBuilder.Entity<User>()
                 .HasDiscriminator<string>("UserType")
                 .HasValue<User>("User")
-                .HasValue<Librarian>("Librarian");            
+                .HasValue<Librarian>("Librarian");
+
+            modelBuilder.Entity<Reader>()
+                .HasIndex(r => r.ReaderNumber)
+                .IsUnique();
 
             // Configure BookAuthor as a junction table with no primary key
             modelBuilder.Entity<BookAuthor>()
@@ -148,6 +152,7 @@ namespace LibraryArchive.Data
         }
 
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Reader> Readers { get; set; }
         public virtual DbSet<Librarian> Librarians { get; set; }
         public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Book> Books { get; set; }

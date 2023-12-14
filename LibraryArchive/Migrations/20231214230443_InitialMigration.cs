@@ -104,7 +104,8 @@ namespace LibraryArchive.Migrations
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReaderNumber = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -196,7 +197,8 @@ namespace LibraryArchive.Migrations
                     UserId = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     BookId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReaderUserId = table.Column<string>(type: "nvarchar(10)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -206,6 +208,11 @@ namespace LibraryArchive.Migrations
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "BookId");
+                    table.ForeignKey(
+                        name: "FK_Borrowings_Users_ReaderUserId",
+                        column: x => x.ReaderUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
                     table.ForeignKey(
                         name: "FK_Borrowings_Users_UserId",
                         column: x => x.UserId,
@@ -269,9 +276,21 @@ namespace LibraryArchive.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Borrowings_ReaderUserId",
+                table: "Borrowings",
+                column: "ReaderUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Borrowings_UserId",
                 table: "Borrowings",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ReaderNumber",
+                table: "Users",
+                column: "ReaderNumber",
+                unique: true,
+                filter: "[ReaderNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",

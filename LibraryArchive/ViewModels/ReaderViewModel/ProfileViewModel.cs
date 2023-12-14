@@ -4,7 +4,7 @@ namespace LibraryArchive.ViewModels.ReaderViewModel
 {
     public class ProfileViewModel
     {
-        public User User { get; set; }
+        public Reader Reader { get; set; }
 
         public List<Borrowing> Borrowings { get; set; }
 

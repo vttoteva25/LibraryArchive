@@ -182,7 +182,7 @@
         @functions {
             string ShortenDescription(string description, int maxLength = 50)
             {
-                if (description.Length <= maxLength)
+                if ((description?.Length ?? 0) <= maxLength)
                 {
                     return description;
                 }

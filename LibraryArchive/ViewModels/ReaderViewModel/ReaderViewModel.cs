@@ -4,7 +4,7 @@ namespace LibraryArchive.ViewModels.ReaderViewModel
 {
     public class ReaderViewModel
     {
-        public List<User> Readers { get; set; }
+        public List<Reader> Readers { get; set; }
         public int ReadersCount { get; set; }
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }

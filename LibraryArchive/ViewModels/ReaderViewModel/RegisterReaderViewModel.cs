@@ -8,6 +8,9 @@ namespace LibraryArchive.ViewModels.ReaderViewModel
         public string UserId { get; set; }
 
         [Required(ErrorMessage = "Полето не може да е празно")]
+        public string ReaderNumber { get; set; }
+
+        [Required(ErrorMessage = "Полето не може да е празно")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Полето не може да е празно")]
