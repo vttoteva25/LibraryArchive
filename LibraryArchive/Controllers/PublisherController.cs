@@ -88,7 +88,8 @@ namespace LibraryArchive.Controllers
             {
                 Publisher publisher = new Publisher();
                 publisher.Name = model.PublisherName;
-
+                publisher.Address = model.Address;
+                publisher.Website = model.Website;
                 try
                 {
                     if (!CheckForExistingPublisher(model.PublisherName))

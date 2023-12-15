@@ -5,8 +5,14 @@
             <div class="col-md-10 mx-auto">
                 <div class="bg-white shadow rounded overflow-hidden">
                     <div class="px-4 py-5" style="margin-top: 20px;">
-                        <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Издателство</h2>
-                        
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="col-6">
+                            <h3 class="mb-0" style="text-indent: 10px;">Издателства</h3>
+                        </div>
+                        <div class="col-6 text-right">
+                            <a asp-controller="Publisher" asp-action="Add" class="btn btn-info">Добави издателство</a>
+                        </div>
+                    </div>
                         @if (Model.Publishers.Count != 0)
                         {
                             <table class="table table-bordered table-striped" style="width:100%">
@@ -62,11 +68,11 @@
                                                 @Html.Raw(string.Join("<br>", publisher.Books.Select(a => a.Title).Distinct()))
                                             </td>
                                             <td width="10%">
-                                                <a asp-controller="Publisher" asp-action="Delete" asp-route-id="@publisher.PublisherId">
-                                                    <span class="glyphicon glyphicon-trash" />
+                                            <a asp-controller="Publisher" asp-action="DeletePublisher" asp-route-id="@publisher.PublisherId">
+                                                <span class="glyphicon glyphicon-trash" style="color:black" />
                                                 </a>
                                                 <a asp-controller="Publisher" asp-action="Edit" asp-route-id="@publisher.PublisherId">
-                                                    <span class="glyphicon glyphicon-edit" />
+                                                <span class="glyphicon glyphicon-edit" style="color:black" />
                                                 </a>
                                             </td>
                                         </tr>

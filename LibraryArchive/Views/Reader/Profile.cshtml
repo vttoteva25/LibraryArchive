@@ -15,23 +15,24 @@
                     </div>
                 </div>
             </div>
-            <div class="px-3 py-4" style="margin-top: 20px;">
+            <h2 class="mb-2" style="margin-left: 35px;">Информация</h2>
+            <div class="container">
                 <div class="p-4 my-2 rounded shadow-sm bg-light">
-                    <h2 class="mb-2 ml-3">Информация</h2>
-                    <p class="normal-text mb-1 ml-3">Име: @Model.Reader.ReaderNumber</p>
+                    <p class="normal-text mb-1 ml-3">Читателски номер: @Model.Reader.ReaderNumber</p>
                     <p class="normal-text mb-1 ml-3">Име: @Model.Reader.FirstName</p>
                     <p class="normal-text mb-1 ml-3">Фамилия: @Model.Reader.LastName</p>
                     <p class="normal-text mb-1 ml-3">Дата на раждане: @Model.Reader.BirthDate.ToShortDateString()</p>
                     <p class="normal-text mb-1 ml-3">Телефонен номер: @Model.Reader.PhoneNumber</p>
                     <p class="normal-text mb-1 ml-3">E-mail: @Model.Reader.Email</p>
                 </div>
+            </div>
                 <div class="p-4 my-2 rounded shadow-sm bg-light">
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="col-6">
+                        <div class="col-6" style="margin-left: 20px;">
                             <h3 class="mb-0">Читателска история</h3>
                         </div>
-                        <div class="col-6 text-right">
-                            <a asp-controller="Borrow" asp-action="Borrow" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-info">Вземи книга</a>
+                    <div class="col-6 text-right" style="margin-right: 50px;">
+                        <a asp-controller="Borrow" asp-action="Borrow" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-info" style="margin-right: 50px;">Вземи книга</a>
                         </div>
                     </div>
                     @if (Model.BorrowingsCount > 0)
@@ -105,6 +106,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 </body>
 

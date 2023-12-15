@@ -45,7 +45,14 @@ namespace LibraryArchive.Controllers
             var book = _db.Books.FirstOrDefault(b => b.BookId == model.BookId);
             if (book == null)
             {
-                return NotFound();
+                ModelState.AddModelError("Borrowing", "Книга с такъв библиотечен номер не е намерена в библиотеката!");
+                return View(model);            
+            }
+
+            if(!book.Available|| book.Scrapped)
+            {
+                ModelState.AddModelError("Borrowing", "Книгата е бракувана или е вече взета!");
+                return View(model);
             }
             book.Available = false;
 

@@ -21,9 +21,18 @@
                         <div asp-validation-summary="All" class="text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label normal-text">* Име на издателство</label>
+                        <label class="control-label normal-text">* Име на издателството</label>
                         <input asp-for="PublisherName" class="form-control normal-text" placeholder="Въведете името на издателството..." />
                         <span asp-validation-for="PublisherName" class="text-danger"></span>
+                    </div><div class="form-group">
+                        <label class="control-label normal-text">Адрес на издателството</label>
+                        <input asp-for="Address" class="form-control normal-text" placeholder="Въведете адрес на издателството..." />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label normal-text">Уебсайт на издателството</label>
+                        <input asp-for="Website" class="form-control normal-text" placeholder="Въведете уебсайт на издателството..." />
+                        <span asp-validation-for="Website" class="text-danger"></span>
                     </div>
                     <div class="form-group align-items-center text-center">
                         <input type="submit" id="register" value="Регистрация" class="btn btn-lg dark-button" />
