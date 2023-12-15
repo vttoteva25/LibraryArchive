@@ -31,7 +31,7 @@
                             <h3 class="mb-0">Читателска история</h3>
                         </div>
                         <div class="col-6 text-right">
-                            <a asp-controller="Borrow" asp-action="Borrow" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-primary">Вземи книга</a>
+                            <a asp-controller="Borrow" asp-action="Borrow" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-info">Вземи книга</a>
                         </div>
                     </div>
                     @if (Model.BorrowingsCount > 0)
@@ -56,7 +56,7 @@
                                                     <td>@book.Title</td>
                                                     <td>@book.BorrowDate</td>
                                                     <td>
-                                                        <a asp-controller="Borrow" asp-action="Return" asp-route-bookId="@book.BookId" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-primary">Връщане</a>
+                                                        <a asp-controller="Borrow" asp-action="Return" asp-route-bookId="@book.BookId" asp-route-readerNumber="@Model.Reader.ReaderNumber" class="btn btn-info">Връщане</a>
                                                     </td>
                                                 </tr>
                                             }
