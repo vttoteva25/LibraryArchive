@@ -6,10 +6,15 @@
             <div class="col-md-10 mx-auto">
                 <div class="bg-white shadow rounded overflow-hidden">
                     <div class="px-4 py-5" style="margin-top: 20px;">
-                        <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Книги</h2>
-                        <div class="row pt-4">
-                            <div class="col-6">
+                        <h2 style="color: #402b2b; font-family: Bahnschrift; font-weight: bold;">Автори</h2>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="col-6">                              
                             </div>
+                            <div class="col-6 text-right">
+                                <a asp-controller="Author" asp-action="Add" class="btn btn-info">Добави автор</a>
+                            </div>
+                        </div>
+                        <div class="row pt-4">                         
                             <form asp-controller="Author" asp-action="Index" method="get">
                                 <p style="color: #402b2b; font-family: Bahnschrift;">
                                     Търсене:
@@ -91,10 +96,10 @@
                                                 @Html.Raw(string.Join("<br>", author.Books.Select(a => a.Title).Distinct()))
                                             </td>
                                             <td width="10%">
-                                                <a asp-controller="Book" asp-action="Delete" asp-route-id="@author.AuthorId">
+                                                <a asp-controller="Author" asp-action="Delete" asp-route-authorId="@author.AuthorId">
                                                     <span class="glyphicon glyphicon-trash" />
                                                 </a>
-                                                <a asp-controller="Book" asp-action="Edit" asp-route-id="@author.AuthorId">
+                                                <a asp-controller="Author" asp-action="Edit" asp-route-authorId="@author.AuthorId">
                                                     <span class="glyphicon glyphicon-edit" />
                                                 </a>
                                             </td>
