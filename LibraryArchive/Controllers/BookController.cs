@@ -155,7 +155,7 @@ namespace LibraryArchive.Controllers
             var borrowings = _db.Borrowings.AsEnumerable()
                 .Where(b => books.Any(book => book.BookId == b.BookId) && b.ReturnDate == null).ToList();
 
-            var readers = _db.Readers.AsEnumerable()
+            var readers = _db.Readers
                 .Where(u => EF.Property<string>(u, "UserType") == "Reader")
                 .OfType<Reader>()
                 .AsEnumerable()

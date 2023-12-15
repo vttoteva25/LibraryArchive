@@ -182,9 +182,13 @@
                                                 @string.Join(", ", book.Genres.Select(a => a.Name))
                                             </td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.Language</td>
-                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="15%" class="ellipsis" onclick="toggleContent(this)">
-                                                @ShortenDescription(book.Description)
-                                                <div class="expanded-content" style="display: none;">@book.Description</div>
+                                            <td style="color: #402b2b; font-family: Bahnschrift;" width="25%">
+                                                <div onclick="toggleContent(this)">
+                                                    @ShortenDescription(book.Description)
+                                                </div>
+                                                <div class="expanded-content">
+                                                    @book.Description
+                                                </div>
                                             </td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.PublicationYear</td>
                                             <td style="color: #402b2b; font-family: Bahnschrift;" width="10%">@book.Publisher.Name</td>
@@ -244,20 +248,36 @@
                         </li>
                     </ul>
                 </nav>
-
             </div>
         </div>
     </div>
+  
+    <style>
+        ellipsis {
+            max-width: 25%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: pointer; 
+        }
 
+        .expanded-content {
+            white-space: normal;
+            display: none;
+        }
+    </style>
     <script>
-        function toggleContent(cell) {
-            const expandedContent = cell.querySelector('.expanded-content');
-            if (expandedContent.style.display === 'none') {
+        function toggleContent(element) {
+            var expandedContent = element.nextElementSibling;
+
+            if (expandedContent.style.display === 'none' || expandedContent.style.display === '') {
+                // Show expanded content and hide shortened text
+                element.style.display = 'none';
                 expandedContent.style.display = 'block';
-                cell.classList.add('expanded');
             } else {
+                // Show shortened text and hide expanded content
+                element.style.display = 'block';
                 expandedContent.style.display = 'none';
-                cell.classList.remove('expanded');
             }
         }
     </script>
