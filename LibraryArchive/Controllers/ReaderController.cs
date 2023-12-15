@@ -200,6 +200,7 @@ namespace LibraryArchive.Controllers
             return RedirectToAction("Index", "Reader");
         }
 
+        [Route("reader/edit/{readerNumber}")]
         public IActionResult Edit([FromRoute] string readerNumber)
         {
             if (string.IsNullOrEmpty(readerNumber))

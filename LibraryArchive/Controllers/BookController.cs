@@ -343,5 +343,26 @@ namespace LibraryArchive.Controllers
 
             return RedirectToAction("Index", "Book");
         }
+
+        [Route("book/delete/{id}")]
+        [HttpGet]
+        public IActionResult Delete([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var book = _db.Books
+                 .FirstOrDefault(u => u.BookId == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            _db.Books.Remove(book);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index", "Book");
+        }
     }
 }
